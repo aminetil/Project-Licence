@@ -1,0 +1,66 @@
+<%- include('../partials/client_header.html') %>
+
+<div class="container py-4">
+  <h1 class="section-title mb-4"><i class="bi bi-bag-check me-2"></i>Mes Commandes</h1>
+
+  <% if (commandes.length === 0) { %>
+    <div class="text-center py-5">
+      <i class="bi bi-bag-x" style="font-size:4rem; color:var(--gray-400);"></i>
+      <h3 class="text-muted mt-3">Aucune commande</h3>
+      <p class="text-muted">Vous n'avez pas encore passé de commande.</p>
+      <a href="/client/catalogue" class="btn btn-primary mt-2"><i class="bi bi-grid me-2"></i>Voir le catalogue</a>
+    </div>
+  <% } else { %>
+    <% commandes.forEach(c => { %>
+      <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <strong>Commande #<%= c.id %></strong>
+            <span class="text-muted ms-2">— <%= new Date(c.date_vente).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+          </div>
+          <div>
+            <% if (c.statut === 'payée') { %>
+              <span class="badge badge-stock-ok">✅ Payée</span>
+            <% } else if (c.statut === 'en_attente') { %>
+              <span class="badge badge-stock-medium">⏳ En attente</span>
+            <% } else { %>
+              <span class="badge badge-stock-low">❌ Annulée</span>
+            <% } %>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <table class="table mb-0">
+            <tbody>
+              <% c.details.forEach(d => { %>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <% if (d.plante_image) { %>
+                        <img src="<%= d.plante_image %>" style="width:35px; height:35px; object-fit:cover; border-radius:6px;">
+                      <% } else { %>
+                        <div style="width:35px; height:35px; border-radius:6px; background:var(--green-50); display:flex; align-items:center; justify-content:center;">
+                          <i class="bi bi-flower1" style="color:var(--green-400); font-size:0.9rem;"></i>
+                        </div>
+                      <% } %>
+                      <span><%= d.plante_nom %></span>
+                    </div>
+                  </td>
+                  <td class="text-muted"><%= d.quantite %> × <%= Number(d.prix_unitaire).toFixed(2) %> DA</td>
+                  <td class="text-end fw-bold"><%= (d.quantite * d.prix_unitaire).toFixed(2) %> DA</td>
+                </tr>
+              <% }); %>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2" class="text-end fw-bold">Total :</td>
+                <td class="text-end fw-bold" style="color:var(--green-600); font-size:1.1rem;"><%= Number(c.total).toFixed(2) %> DA</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    <% }); %>
+  <% } %>
+</div>
+
+<%- include('../partials/client_footer.html') %>

@@ -1,0 +1,76 @@
+<%- include('../partials/client_header.html') %>
+
+<!-- Hero Section -->
+<section class="client-hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Bienvenue chez <span class="hero-accent">KHADRA</span></h1>
+      <p class="hero-subtitle">Découvrez notre collection de plantes soigneusement sélectionnées pour embellir votre espace.</p>
+      <a href="/client/catalogue" class="btn btn-accent btn-lg">
+        <i class="bi bi-grid me-2"></i>Voir le catalogue
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-4">🌿 Nos Catégories</h2>
+    <div class="row g-3 justify-content-center">
+      <% categories.forEach(c => { %>
+        <div class="col-6 col-md-3">
+          <a href="/client/catalogue?categorie=<%= c.categorie %>" class="category-card text-decoration-none">
+            <div class="category-icon">
+              <% if (c.categorie === 'fleur') { %>🌹
+              <% } else if (c.categorie === 'arbre') { %>🌳
+              <% } else if (c.categorie === 'arbuste') { %>🌿
+              <% } else if (c.categorie === 'plante_interieur') { %>🪴
+              <% } else if (c.categorie === 'cactus') { %>🌵
+              <% } else { %>🌱<% } %>
+            </div>
+            <span class="category-name"><%= c.categorie.replace('_', ' ') %></span>
+            <span class="category-count"><%= c.count %> plantes</span>
+          </a>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Plants -->
+<section class="py-5" style="background: var(--green-25);">
+  <div class="container">
+    <h2 class="section-title text-center mb-4">🌱 Plantes en vedette</h2>
+    <div class="row g-4">
+      <% featured.forEach(p => { %>
+        <div class="col-6 col-md-4 col-lg-3">
+          <a href="/client/catalogue/<%= p.id %>" class="text-decoration-none">
+            <div class="plant-card">
+              <div class="plant-image">
+                <% if (p.image) { %>
+                  <img src="<%= p.image %>" alt="<%= p.nom %>">
+                <% } else { %>
+                  <i class="bi bi-flower1" style="font-size:3rem; color:var(--green-300);"></i>
+                <% } %>
+              </div>
+              <div class="p-3">
+                <div class="plant-name"><%= p.nom %></div>
+                <span class="badge badge-categorie mb-2"><%= p.categorie.replace('_', ' ') %></span>
+                <div class="plant-price"><%= Number(p.prix).toFixed(2) %> DA</div>
+                <% if (p.quantite < 5 && p.quantite > 0) { %>
+                  <small class="text-danger"><i class="bi bi-exclamation-circle"></i> Plus que <%= p.quantite %> en stock</small>
+                <% } %>
+              </div>
+            </div>
+          </a>
+        </div>
+      <% }); %>
+    </div>
+    <div class="text-center mt-4">
+      <a href="/client/catalogue" class="btn btn-primary btn-lg">Voir tout le catalogue <i class="bi bi-arrow-right ms-2"></i></a>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/client_footer.html') %>

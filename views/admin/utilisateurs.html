@@ -1,0 +1,67 @@
+<%- include('../partials/header.html') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="mb-0"><i class="bi bi-people-fill me-2"></i>Gestion des utilisateurs</h1>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Téléphone</th>
+            <th>Inscription</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (utilisateurs.length === 0) { %>
+            <tr><td colspan="7" class="text-center text-muted py-4">Aucun utilisateur</td></tr>
+          <% } %>
+          <% utilisateurs.forEach(u => { %>
+            <tr>
+              <td class="fw-bold"><%= u.id %></td>
+              <td class="fw-bold"><%= u.nom %></td>
+              <td class="text-muted"><%= u.email %></td>
+              <td>
+                <% if (u.role === 'admin') { %>
+                  <span class="badge" style="background:#fce4ec; color:#c62828;">👨‍💼 Admin</span>
+                <% } else if (u.role === 'vendeur') { %>
+                  <span class="badge" style="background:#e3f2fd; color:#1565c0;">🛒 Vendeur</span>
+                <% } else { %>
+                  <span class="badge" style="background:var(--green-50); color:var(--green-800);">👤 Client</span>
+                <% } %>
+              </td>
+              <td><%= u.telephone || '—' %></td>
+              <td><%= new Date(u.created_at).toLocaleDateString('fr-FR') %></td>
+              <td>
+                <div class="d-flex gap-1 align-items-center">
+                  <form method="POST" action="/admin/utilisateurs/<%= u.id %>/role?_method=PUT" style="display:inline;">
+                    <select name="role" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
+                      <option value="client" <%= u.role === 'client' ? 'selected' : '' %>>Client</option>
+                      <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                    </select>
+                  </form>
+                  <% if (u.id !== currentUser.id) { %>
+                    <form method="POST" action="/admin/utilisateurs/<%= u.id %>?_method=DELETE" style="display:inline;" onsubmit="return confirm('Supprimer cet utilisateur ?')">
+                      <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer.html') %>

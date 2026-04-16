@@ -1,0 +1,94 @@
+<%- include('../partials/client_header.html') %>
+
+<div class="container py-4">
+  <h1 class="section-title mb-4"><i class="bi bi-cart3 me-2"></i>Mon Panier</h1>
+
+  <% if (items.length === 0) { %>
+    <div class="text-center py-5">
+      <i class="bi bi-cart-x" style="font-size:4rem; color:var(--gray-400);"></i>
+      <h3 class="text-muted mt-3">Votre panier est vide</h3>
+      <a href="/client/catalogue" class="btn btn-primary mt-3"><i class="bi bi-grid me-2"></i>Voir le catalogue</a>
+    </div>
+  <% } else { %>
+    <div class="row g-4">
+      <!-- Cart Items -->
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Plante</th>
+                  <th>Prix</th>
+                  <th style="width:120px;">Quantité</th>
+                  <th>Sous-total</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% items.forEach(item => { %>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center gap-3">
+                        <% if (item.plante.image) { %>
+                          <img src="<%= item.plante.image %>" alt="<%= item.plante.nom %>" style="width:50px; height:50px; object-fit:cover; border-radius:8px;">
+                        <% } else { %>
+                          <div style="width:50px; height:50px; border-radius:8px; background:var(--green-50); display:flex; align-items:center; justify-content:center;">
+                            <i class="bi bi-flower1" style="color:var(--green-400);"></i>
+                          </div>
+                        <% } %>
+                        <strong><%= item.plante.nom %></strong>
+                      </div>
+                    </td>
+                    <td><%= Number(item.plante.prix).toFixed(2) %> DA</td>
+                    <td>
+                      <form method="POST" action="/client/panier/modifier" class="d-flex gap-1">
+                        <input type="hidden" name="id_plante" value="<%= item.id_plante %>">
+                        <input type="number" name="quantite" value="<%= item.quantite %>" min="1" max="<%= item.plante.quantite %>" class="form-control form-control-sm" style="width:70px;" onchange="this.form.submit()">
+                      </form>
+                    </td>
+                    <td class="fw-bold" style="color:var(--green-600);"><%= (item.plante.prix * item.quantite).toFixed(2) %> DA</td>
+                    <td>
+                      <form method="POST" action="/client/panier/supprimer">
+                        <input type="hidden" name="id_plante" value="<%= item.id_plante %>">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Retirer"><i class="bi bi-trash"></i></button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header fw-bold"><i class="bi bi-receipt me-2"></i>Résumé</div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Articles (<%= items.reduce((s, i) => s + i.quantite, 0) %>)</span>
+              <span><%= total.toFixed(2) %> DA</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+              <strong style="font-size:1.1rem;">Total</strong>
+              <strong style="font-size:1.2rem; color:var(--green-600);"><%= total.toFixed(2) %> DA</strong>
+            </div>
+            <form method="POST" action="/client/panier/commander">
+              <button type="submit" class="btn btn-primary w-100 btn-lg">
+                <i class="bi bi-bag-check me-2"></i>Passer la commande
+              </button>
+            </form>
+            <a href="/client/catalogue" class="btn btn-outline-secondary w-100 mt-2">
+              <i class="bi bi-arrow-left me-1"></i>Continuer les achats
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/client_footer.html') %>

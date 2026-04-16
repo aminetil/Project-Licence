@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — KHADRA Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/css/custom.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Admin Top Navigation Bar -->
+  <nav class="top-navbar">
+    <div class="top-navbar-inner">
+      <a href="/admin/plantes" class="navbar-brand-custom">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#74c69d" />
+              <stop offset="100%" stop-color="#2d6a4f" />
+            </linearGradient>
+          </defs>
+          <path d="M12 2C12 2 4 4 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 4 12 2 12 2Z" fill="url(#logoGrad)"/>
+          <path d="M12 2V20" stroke="#0f2b1e" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 13C12 13 14 10 16 10" stroke="#0f2b1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 16C12 16 9 14 7 14" stroke="#0f2b1e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>KHADRA</span>
+      </a>
+      <button class="navbar-toggler-custom d-lg-none" onclick="document.getElementById('navLinks').classList.toggle('show')">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="/admin/plantes" class="nav-link-item <%= currentPath.startsWith('/admin/plantes') ? 'active' : '' %>"><i class="bi bi-flower1"></i> Plantes</a>
+        <a href="/admin/stock" class="nav-link-item <%= currentPath.startsWith('/admin/stock') ? 'active' : '' %>"><i class="bi bi-box-seam-fill"></i> Stock</a>
+        <a href="/admin/ventes" class="nav-link-item <%= currentPath.startsWith('/admin/ventes') ? 'active' : '' %>"><i class="bi bi-cart-fill"></i> Ventes</a>
+        <a href="/admin/statistiques" class="nav-link-item <%= currentPath.startsWith('/admin/statistiques') ? 'active' : '' %>"><i class="bi bi-bar-chart-line"></i> Statistiques</a>
+        <a href="/admin/utilisateurs" class="nav-link-item <%= currentPath.startsWith('/admin/utilisateurs') ? 'active' : '' %>"><i class="bi bi-people-fill"></i> Utilisateurs</a>
+      </div>
+      <div class="nav-user">
+        <span class="nav-user-name"><%= currentUser.nom %></span>
+        <a href="/logout" class="nav-logout" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content-top">
+    <div class="content-area">
+      <% if (success && success.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i><%= success %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% } %>
+      <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i><%= error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% } %>

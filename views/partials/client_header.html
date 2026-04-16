@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — KHADRA Pépinière</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/css/custom.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Client Navigation Bar -->
+  <nav class="client-navbar">
+    <div class="client-navbar-inner">
+      <a href="/client/home" class="client-brand">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGradClient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#74c69d" />
+              <stop offset="100%" stop-color="#2d6a4f" />
+            </linearGradient>
+          </defs>
+          <path d="M12 2C12 2 4 4 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 4 12 2 12 2Z" fill="url(#logoGradClient)"/>
+          <path d="M12 2V20" stroke="#1b4332" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 13C12 13 14 10 16 10" stroke="#1b4332" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 16C12 16 9 14 7 14" stroke="#1b4332" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>KHADRA</span>
+      </a>
+      <button class="navbar-toggler-custom d-lg-none" onclick="document.getElementById('clientNavLinks').classList.toggle('show')">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="client-nav-links" id="clientNavLinks">
+        <a href="/client/home" class="client-nav-item <%= currentPath === '/client/home' || currentPath === '/' ? 'active' : '' %>"><i class="bi bi-house"></i> Accueil</a>
+        <a href="/client/catalogue" class="client-nav-item <%= currentPath.startsWith('/client/catalogue') ? 'active' : '' %>"><i class="bi bi-grid"></i> Catalogue</a>
+        <a href="/client/panier" class="client-nav-item <%= currentPath.startsWith('/client/panier') ? 'active' : '' %>">
+          <i class="bi bi-cart3"></i> Panier
+          <% if (panier && panier.length > 0) { %>
+            <span class="cart-badge"><%= panier.reduce((s, i) => s + i.quantite, 0) %></span>
+          <% } %>
+        </a>
+        <% if (currentUser) { %>
+          <a href="/client/commandes" class="client-nav-item <%= currentPath.startsWith('/client/commandes') ? 'active' : '' %>"><i class="bi bi-bag-check"></i> Mes Commandes</a>
+          <a href="/client/profil" class="client-nav-item <%= currentPath.startsWith('/client/profil') ? 'active' : '' %>"><i class="bi bi-person-circle"></i> Profil</a>
+        <% } %>
+      </div>
+      <div class="client-nav-auth">
+        <% if (currentUser) { %>
+          <span class="client-user-greeting">Bonjour, <%= currentUser.nom.split(' ')[0] %></span>
+          <a href="/logout" class="client-logout-btn" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
+        <% } else { %>
+          <a href="/login" class="btn btn-sm btn-outline-light">Se connecter</a>
+          <a href="/register" class="btn btn-sm btn-primary ms-2" style="background:var(--green-400); border:none;">S'inscrire</a>
+        <% } %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Client Flash Messages -->
+  <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+    <div class="container mt-3">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i><%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    </div>
+  <% } %>
+  <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+    <div class="container mt-3">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i><%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    </div>
+  <% } %>

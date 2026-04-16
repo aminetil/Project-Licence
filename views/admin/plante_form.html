@@ -1,0 +1,82 @@
+<%- include('../partials/header.html') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="mb-0">
+    <i class="bi bi-<%= plante ? 'pencil' : 'plus-circle' %> me-2"></i>
+    <%= plante ? 'Modifier la plante' : 'Ajouter une plante' %>
+  </h1>
+  <a href="/admin/plantes" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-left me-1"></i> Retour
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-body p-4">
+    <form method="POST" 
+          action="<%= plante ? '/admin/plantes/' + plante.id + '?_method=PUT' : '/admin/plantes' %>" 
+          enctype="multipart/form-data">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="nom" class="form-label fw-bold">Nom de la plante *</label>
+          <input type="text" class="form-control" id="nom" name="nom" value="<%= plante ? plante.nom : '' %>" required>
+        </div>
+        <div class="col-md-6">
+          <label for="categorie" class="form-label fw-bold">Catégorie *</label>
+          <select class="form-select" id="categorie" name="categorie" required>
+            <option value="">Choisir...</option>
+            <% ['fleur', 'arbre', 'arbuste', 'plante_interieur', 'cactus', 'herbe_aromatique'].forEach(c => { %>
+              <option value="<%= c %>" <%= plante && plante.categorie === c ? 'selected' : '' %>><%= c.replace('_', ' ') %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="cout" class="form-label fw-bold">Coût d'achat (DA) *</label>
+          <input type="number" step="0.01" class="form-control" id="cout" name="cout" value="<%= plante ? plante.cout : '' %>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="prix" class="form-label fw-bold">Prix de vente (DA) *</label>
+          <input type="number" step="0.01" class="form-control" id="prix" name="prix" value="<%= plante ? plante.prix : '' %>" required>
+        </div>
+        <div class="col-md-4">
+          <label for="quantite" class="form-label fw-bold">Quantité en stock</label>
+          <input type="number" class="form-control" id="quantite" name="quantite" value="<%= plante ? plante.quantite : 0 %>">
+        </div>
+        <div class="col-md-4">
+          <label for="saison" class="form-label fw-bold">Saison</label>
+          <select class="form-select" id="saison" name="saison">
+            <% ['toute_saison', 'printemps', 'été', 'automne', 'hiver'].forEach(s => { %>
+              <option value="<%= s %>" <%= plante && plante.saison === s ? 'selected' : '' %>><%= s.replace('_', ' ') %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="arrosage" class="form-label fw-bold">Arrosage</label>
+          <select class="form-select" id="arrosage" name="arrosage">
+            <% ['modéré', 'fréquent', 'rare'].forEach(a => { %>
+              <option value="<%= a %>" <%= plante && plante.arrosage === a ? 'selected' : '' %>><%= a %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="image" class="form-label fw-bold">Image</label>
+          <input type="file" class="form-control" id="image" name="image" accept="image/*">
+          <% if (plante && plante.image) { %>
+            <small class="text-muted">Image actuelle : <img src="<%= plante.image %>" style="height:30px; border-radius:4px; margin-left:6px;"></small>
+          <% } %>
+        </div>
+        <div class="col-12">
+          <label for="description" class="form-label fw-bold">Description</label>
+          <textarea class="form-control" id="description" name="description" rows="3"><%= plante ? (plante.description || '') : '' %></textarea>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="bi bi-check-circle me-1"></i>
+            <%= plante ? 'Enregistrer les modifications' : 'Ajouter la plante' %>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer.html') %>

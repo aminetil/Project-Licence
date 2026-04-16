@@ -1,0 +1,141 @@
+<%- include('../partials/header.html') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="mb-0"><i class="bi bi-box-seam-fill me-2"></i>Gestion du stock</h1>
+</div>
+
+<!-- Low Stock Alerts -->
+<% if (lowStock.length > 0) { %>
+  <div class="alert alert-warning d-flex align-items-start mb-4" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-3 mt-1" style="font-size:1.3rem;"></i>
+    <div>
+      <strong>⚠️ Stock faible</strong> — Les plantes suivantes ont un stock inférieur à 10 unités :
+      <div class="mt-2">
+        <% lowStock.forEach(p => { %>
+          <span class="badge badge-stock-low me-1 mb-1"><%= p.nom %> : <%= p.quantite %></span>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<div class="row g-4">
+  <!-- Stock Table -->
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-list-ul me-2"></i>État du stock</div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Plante</th>
+                <th>Catégorie</th>
+                <th>Quantité</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% plantes.forEach(p => { %>
+                <tr>
+                  <td class="fw-bold"><%= p.nom %></td>
+                  <td><span class="badge badge-categorie"><%= p.categorie %></span></td>
+                  <td><%= p.quantite %></td>
+                  <td>
+                    <% if (p.quantite === 0) { %>
+                      <span class="badge badge-stock-low"><i class="bi bi-x-circle me-1"></i>Rupture</span>
+                    <% } else if (p.quantite < 10) { %>
+                      <span class="badge badge-stock-low"><i class="bi bi-exclamation-triangle me-1"></i>Stock faible</span>
+                    <% } else if (p.quantite < 20) { %>
+                      <span class="badge badge-stock-medium">Moyen</span>
+                    <% } else { %>
+                      <span class="badge badge-stock-ok"><i class="bi bi-check-circle me-1"></i>OK</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Movement -->
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-plus-circle me-2"></i>Nouveau mouvement</div>
+      <div class="card-body">
+        <form method="POST" action="/admin/stock/mouvement">
+          <div class="mb-3">
+            <label for="id_plante" class="form-label fw-bold">Plante</label>
+            <select class="form-select" id="id_plante" name="id_plante" required>
+              <option value="">Choisir...</option>
+              <% plantes.forEach(p => { %>
+                <option value="<%= p.id %>"><%= p.nom %> (stock: <%= p.quantite %>)</option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="type" class="form-label fw-bold">Type</label>
+            <select class="form-select" id="type" name="type" required>
+              <option value="entree">📥 Entrée (réception)</option>
+              <option value="sortie">📤 Sortie (perte/ajustement)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="quantite" class="form-label fw-bold">Quantité</label>
+            <input type="number" class="form-control" id="quantite" name="quantite" min="1" required>
+          </div>
+          <div class="mb-3">
+            <label for="note" class="form-label fw-bold">Note (optionnel)</label>
+            <input type="text" class="form-control" id="note" name="note" placeholder="Ex: Livraison fournisseur">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-check-circle me-1"></i> Enregistrer
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Recent Movements -->
+    <div class="card mt-4">
+      <div class="card-header"><i class="bi bi-arrow-left-right me-2"></i>Derniers mouvements</div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" style="font-size:0.85rem;">
+            <thead>
+              <tr>
+                <th>Plante</th>
+                <th>Type</th>
+                <th>Qté</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (mouvements.length === 0) { %>
+                <tr><td colspan="4" class="text-center text-muted py-3">Aucun mouvement</td></tr>
+              <% } %>
+              <% mouvements.forEach(m => { %>
+                <tr>
+                  <td><%= m.plante_nom %></td>
+                  <td>
+                    <% if (m.type === 'entree') { %>
+                      <span class="badge badge-stock-ok">📥 Entrée</span>
+                    <% } else { %>
+                      <span class="badge badge-stock-low">📤 Sortie</span>
+                    <% } %>
+                  </td>
+                  <td><%= m.quantite %></td>
+                  <td><%= new Date(m.date_mouvement).toLocaleDateString('fr-FR') %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer.html') %>

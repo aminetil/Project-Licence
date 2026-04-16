@@ -1,0 +1,102 @@
+<%- include('../partials/client_header.html') %>
+
+<div class="container py-4">
+  <a href="/client/catalogue" class="btn btn-outline-primary mb-4"><i class="bi bi-arrow-left me-1"></i>Retour au catalogue</a>
+
+  <div class="row g-4">
+    <!-- Plant Image -->
+    <div class="col-md-5">
+      <div class="card" style="overflow:hidden;">
+        <div class="plant-image" style="height:350px;">
+          <% if (plante.image) { %>
+            <img src="<%= plante.image %>" alt="<%= plante.nom %>" style="width:100%;height:100%;object-fit:cover;">
+          <% } else { %>
+            <i class="bi bi-flower1" style="font-size:5rem; color:var(--green-300);"></i>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plant Details -->
+    <div class="col-md-7">
+      <h1 style="font-family:'Playfair Display',serif;"><%= plante.nom %></h1>
+      <span class="badge badge-categorie mb-3" style="font-size:0.85rem;"><%= plante.categorie.replace('_', ' ') %></span>
+      
+      <div class="plant-price mb-3" style="font-size:1.8rem;"><%= Number(plante.prix).toFixed(2) %> DA</div>
+
+      <% if (plante.description) { %>
+        <p class="text-muted mb-3"><%= plante.description %></p>
+      <% } %>
+
+      <!-- Plant Info -->
+      <div class="row g-2 mb-4">
+        <div class="col-6">
+          <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
+            <i class="bi bi-droplet-fill" style="color:var(--green-500);"></i>
+            <div>
+              <small class="text-muted d-block">Arrosage</small>
+              <span class="fw-bold small"><%= plante.arrosage || 'modéré' %></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
+            <i class="bi bi-sun-fill" style="color:var(--warm-500);"></i>
+            <div>
+              <small class="text-muted d-block">Saison</small>
+              <span class="fw-bold small"><%= (plante.saison || 'toute saison').replace('_', ' ') %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock Info & Add to Cart -->
+      <% if (plante.quantite > 0) { %>
+        <div class="d-flex align-items-center gap-3">
+          <form method="POST" action="/client/panier/ajouter" class="d-flex align-items-center gap-2">
+            <input type="hidden" name="id_plante" value="<%= plante.id %>">
+            <input type="number" name="quantite" value="1" min="1" max="<%= plante.quantite %>" class="form-control" style="width:80px;">
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="bi bi-cart-plus me-2"></i>Ajouter au panier
+            </button>
+          </form>
+        </div>
+        <% if (plante.quantite < 5) { %>
+          <p class="text-danger mt-2"><i class="bi bi-exclamation-circle"></i> Plus que <%= plante.quantite %> en stock !</p>
+        <% } else { %>
+          <p class="text-success mt-2"><i class="bi bi-check-circle"></i> En stock (<%= plante.quantite %> disponibles)</p>
+        <% } %>
+      <% } else { %>
+        <div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>Ce produit est actuellement en rupture de stock.</div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Related Plants -->
+  <% if (related.length > 0) { %>
+    <h2 class="section-title mt-5 mb-3"><i class="bi bi-heart me-2"></i>Plantes similaires</h2>
+    <div class="row g-4">
+      <% related.forEach(r => { %>
+        <div class="col-6 col-md-3">
+          <a href="/client/catalogue/<%= r.id %>" class="text-decoration-none">
+            <div class="plant-card">
+              <div class="plant-image">
+                <% if (r.image) { %>
+                  <img src="<%= r.image %>" alt="<%= r.nom %>">
+                <% } else { %>
+                  <i class="bi bi-flower1" style="font-size:2.5rem; color:var(--green-300);"></i>
+                <% } %>
+              </div>
+              <div class="p-3">
+                <div class="plant-name"><%= r.nom %></div>
+                <div class="plant-price"><%= Number(r.prix).toFixed(2) %> DA</div>
+              </div>
+            </div>
+          </a>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/client_footer.html') %>
