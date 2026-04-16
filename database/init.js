@@ -106,7 +106,7 @@ function seedDatabase() {
 
   // ── Seed utilisateurs (Admins, Employees, Clients) ──
   const insertUser = db.prepare('INSERT INTO utilisateurs (nom, email, mot_de_passe, role, telephone, adresse) VALUES (?, ?, ?, ?, ?, ?)');
-  
+
   // Admins & Vendeurs
   const adminId = insertUser.run('Admin Pépinière', 'admin@pepiniere.com', hashedPassword, 'admin', null, null).lastInsertRowid;
   const vendeurId = insertUser.run('Mohamed Vendeur', 'mohamed@pepiniere.com', hashedPassword, 'vendeur', null, null).lastInsertRowid;
@@ -140,7 +140,7 @@ function seedDatabase() {
   // ── Seed ventes passées (pour Admin Statistiques et Profil Client) ──
   const insertVente = db.prepare('INSERT INTO ventes (date_vente, id_client, id_employe, total) VALUES (?, ?, ?, ?)');
   const insertDetail = db.prepare('INSERT INTO details_vente (id_vente, id_plante, quantite, prix_unitaire, cout_unitaire) VALUES (?, ?, ?, ?, ?)');
-  
+
   // Vente 1 pour client 1
   let v1 = insertVente.run('2026-03-10', client1, vendeurId, 45.0); // 3x Rose
   insertDetail.run(v1.lastInsertRowid, 1, 3, 15.0, 5.0);
