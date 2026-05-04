@@ -36,11 +36,11 @@
               <td class="fw-bold" style="color: var(--green-600);"><%= Number(v.total).toFixed(2) %></td>
               <td>
                 <% if (v.statut === 'payée') { %>
-                  <span class="badge badge-stock-ok">✅ Payée</span>
+                  <span class="badge badge-stock-ok"> Payée</span>
                 <% } else if (v.statut === 'en_attente') { %>
-                  <span class="badge badge-stock-medium">⏳ En attente</span>
+                  <span class="badge badge-stock-medium"> En attente</span>
                 <% } else { %>
-                  <span class="badge badge-stock-low">❌ Annulée</span>
+                  <span class="badge badge-stock-low"> Annulée</span>
                 <% } %>
               </td>
               <td>

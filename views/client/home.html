@@ -16,18 +16,18 @@
 <!-- Categories -->
 <section class="py-5">
   <div class="container">
-    <h2 class="section-title text-center mb-4">🌿 Nos Catégories</h2>
+    <h2 class="section-title text-center mb-4"> Nos Catégories</h2>
     <div class="row g-3 justify-content-center">
       <% categories.forEach(c => { %>
         <div class="col-6 col-md-3">
           <a href="/client/catalogue?categorie=<%= c.categorie %>" class="category-card text-decoration-none">
             <div class="category-icon">
-              <% if (c.categorie === 'fleur') { %>🌹
-              <% } else if (c.categorie === 'arbre') { %>🌳
-              <% } else if (c.categorie === 'arbuste') { %>🌿
-              <% } else if (c.categorie === 'plante_interieur') { %>🪴
-              <% } else if (c.categorie === 'cactus') { %>🌵
-              <% } else { %>🌱<% } %>
+              <% if (c.categorie === 'fleur') { %>
+              <% } else if (c.categorie === 'arbre') { %>
+              <% } else if (c.categorie === 'arbuste') { %>
+              <% } else if (c.categorie === 'plante_interieur') { %>
+              <% } else if (c.categorie === 'cactus') { %>
+              <% } else { %><% } %>
             </div>
             <span class="category-name"><%= c.categorie.replace('_', ' ') %></span>
             <span class="category-count"><%= c.count %> plantes</span>
@@ -41,7 +41,7 @@
 <!-- Featured Plants -->
 <section class="py-5" style="background: var(--green-25);">
   <div class="container">
-    <h2 class="section-title text-center mb-4">🌱 Plantes en vedette</h2>
+    <h2 class="section-title text-center mb-4"> Plantes en vedette</h2>
     <div class="row g-4">
       <% featured.forEach(p => { %>
         <div class="col-6 col-md-4 col-lg-3">

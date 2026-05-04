@@ -49,8 +49,8 @@
           <span class="client-user-greeting">Bonjour, <%= currentUser.nom.split(' ')[0] %></span>
           <a href="/logout" class="client-logout-btn" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
         <% } else { %>
-          <a href="/login" class="btn btn-sm btn-outline-light">Se connecter</a>
-          <a href="/register" class="btn btn-sm btn-primary ms-2" style="background:var(--green-400); border:none;">S'inscrire</a>
+          <a href="/login" class="btn-login"><i class="bi bi-box-arrow-in-right"></i> Se connecter</a>
+          <a href="/register" class="btn-register"><i class="bi bi-person-plus"></i> S'inscrire</a>
         <% } %>
       </div>
     </div>

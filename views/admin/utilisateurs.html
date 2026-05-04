@@ -30,11 +30,11 @@
               <td class="text-muted"><%= u.email %></td>
               <td>
                 <% if (u.role === 'admin') { %>
-                  <span class="badge" style="background:#fce4ec; color:#c62828;">👨‍💼 Admin</span>
+                  <span class="badge" style="background:#fce4ec; color:#c62828;"> Admin</span>
                 <% } else if (u.role === 'vendeur') { %>
-                  <span class="badge" style="background:#e3f2fd; color:#1565c0;">🛒 Vendeur</span>
+                  <span class="badge" style="background:#e3f2fd; color:#1565c0;"> Vendeur</span>
                 <% } else { %>
-                  <span class="badge" style="background:var(--green-50); color:var(--green-800);">👤 Client</span>
+                  <span class="badge" style="background:var(--green-50); color:var(--green-800);"> Client</span>
                 <% } %>
               </td>
               <td><%= u.telephone || '—' %></td>

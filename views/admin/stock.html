@@ -79,8 +79,8 @@
           <div class="mb-3">
             <label for="type" class="form-label fw-bold">Type</label>
             <select class="form-select" id="type" name="type" required>
-              <option value="entree">📥 Entrée (réception)</option>
-              <option value="sortie">📤 Sortie (perte/ajustement)</option>
+              <option value="entree"> Entrée (réception)</option>
+              <option value="sortie"> Sortie (perte/ajustement)</option>
             </select>
           </div>
           <div class="mb-3">
@@ -121,9 +121,9 @@
                   <td><%= m.plante_nom %></td>
                   <td>
                     <% if (m.type === 'entree') { %>
-                      <span class="badge badge-stock-ok">📥 Entrée</span>
+                      <span class="badge badge-stock-ok"> Entrée</span>
                     <% } else { %>
-                      <span class="badge badge-stock-low">📤 Sortie</span>
+                      <span class="badge badge-stock-low"> Sortie</span>
                     <% } %>
                   </td>
                   <td><%= m.quantite %></td>
