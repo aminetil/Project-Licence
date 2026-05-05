@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
   const total = items.reduce((sum, item) => sum + (item.plante.prix * item.quantite), 0);
   
   db.close();
-  res.render('client/panier', { title: 'Mon Panier', items, total });
+  res.render('client/panier', { title: 'My Cart', items, total });
 });
 
 // POST /client/panier/ajouter — Add to cart
@@ -33,7 +33,7 @@ router.post('/ajouter', (req, res) => {
     req.session.panier.push({ id_plante: parseInt(id_plante), quantite: qty });
   }
   
-  req.flash('success', 'Produit ajouté au panier !');
+  req.flash('success', 'Product added to cart!');
   const referer = req.get('Referer') || '/client/catalogue';
   res.redirect(referer);
 });
@@ -60,20 +60,20 @@ router.post('/supprimer', (req, res) => {
   if (req.session.panier) {
     req.session.panier = req.session.panier.filter(i => i.id_plante != id_plante);
   }
-  req.flash('success', 'Produit retiré du panier.');
+  req.flash('success', 'Product removed from cart.');
   res.redirect('/client/panier');
 });
 
 // POST /client/panier/commander — Checkout (requires login)
 router.post('/commander', (req, res) => {
   if (!req.session.user) {
-    req.flash('error', 'Veuillez vous connecter pour passer commande.');
+    req.flash('error', 'Please log in to place an order.');
     return res.redirect('/login');
   }
   
   const panier = req.session.panier || [];
   if (panier.length === 0) {
-    req.flash('error', 'Votre panier est vide.');
+    req.flash('error', 'Your cart is empty.');
     return res.redirect('/client/panier');
   }
   
@@ -86,7 +86,7 @@ router.post('/commander', (req, res) => {
     const plante = db.prepare('SELECT * FROM plantes WHERE id = ?').get(item.id_plante);
     if (!plante || plante.quantite < item.quantite) {
       db.close();
-      req.flash('error', `Stock insuffisant pour "${plante ? plante.nom : 'plante supprimée'}".`);
+      req.flash('error', `Insufficient stock for "${plante ? plante.nom : 'deleted plant'}".`);
       return res.redirect('/client/panier');
     }
     total += plante.prix * item.quantite;
@@ -94,7 +94,7 @@ router.post('/commander', (req, res) => {
   }
   
   // Create vente
-  const vente = db.prepare('INSERT INTO ventes (id_client, total, statut) VALUES (?, ?, ?)').run(req.session.user.id, total, 'en_attente');
+  const vente = db.prepare('INSERT INTO ventes (id_client, total, statut) VALUES (?, ?, ?)').run(req.session.user.id, total, 'pending');
   
   // Create details + update stock
   for (const item of items) {
@@ -108,7 +108,7 @@ router.post('/commander', (req, res) => {
   
   // Clear cart
   req.session.panier = [];
-  req.flash('success', `Commande #${vente.lastInsertRowid} passée avec succès ! Total: ${total.toFixed(2)} DA`);
+  req.flash('success', `Order #${vente.lastInsertRowid} placed successfully! Total: ${total.toFixed(2)} DA`);
   res.redirect('/client/commandes');
 });
 

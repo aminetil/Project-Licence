@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
   const categories = db.prepare('SELECT categorie, COUNT(*) as count FROM plantes GROUP BY categorie ORDER BY count DESC').all();
   
   db.close();
-  res.render('client/home', { title: 'Accueil', featured, categories });
+  res.render('client/home', { title: 'Home', featured, categories });
 });
 
 module.exports = router;

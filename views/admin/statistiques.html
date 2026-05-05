@@ -1,7 +1,7 @@
 <%- include('../partials/header.html') %>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>Statistiques</h1>
+  <h1 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>Statistics</h1>
 </div>
 
 <!-- Summary Cards -->
@@ -12,7 +12,7 @@
         <i class="bi bi-flower1"></i>
       </div>
       <div class="stat-value"><%= total_stock %></div>
-      <div class="stat-label">Plantes en stock</div>
+      <div class="stat-label">Total plants in stock</div>
     </div>
   </div>
   <div class="col-md-3">
@@ -21,7 +21,7 @@
         <i class="bi bi-cash-coin"></i>
       </div>
       <div class="stat-value"><%= Number(totals.ca_total).toFixed(2) %></div>
-      <div class="stat-label">Chiffre d'affaires (DA)</div>
+      <div class="stat-label">Total Turnover (DA)</div>
     </div>
   </div>
   <div class="col-md-3">
@@ -30,7 +30,7 @@
         <i class="bi bi-graph-up-arrow"></i>
       </div>
       <div class="stat-value"><%= Number(totals.benefice_total).toFixed(2) %></div>
-      <div class="stat-label">Bénéfice total (DA)</div>
+      <div class="stat-label">Total Profit (DA)</div>
     </div>
   </div>
   <div class="col-md-3">
@@ -39,27 +39,27 @@
         <i class="bi bi-receipt"></i>
       </div>
       <div class="stat-value"><%= totals.nb_ventes %></div>
-      <div class="stat-label">Nombre de ventes</div>
+      <div class="stat-label">Number of Sales</div>
     </div>
   </div>
 </div>
 
-<!-- CA & Bénéfice par mois -->
+<!-- Turnover & Profit by month -->
 <div class="card">
-  <div class="card-header"><i class="bi bi-calendar3 me-2"></i>CA & Bénéfice par mois</div>
+  <div class="card-header"><i class="bi bi-calendar3 me-2"></i>Turnover & Profit by Month</div>
   <div class="card-body p-0">
     <table class="table table-hover mb-0">
       <thead>
         <tr>
-          <th>Mois</th>
-          <th class="text-end">Ventes</th>
-          <th class="text-end">CA (DA)</th>
-          <th class="text-end">Bénéfice (DA)</th>
+          <th>Month</th>
+          <th class="text-end">Sales</th>
+          <th class="text-end">Turnover (DA)</th>
+          <th class="text-end">Profit (DA)</th>
         </tr>
       </thead>
       <tbody>
         <% if (parMois.length === 0) { %>
-          <tr><td colspan="4" class="text-center text-muted py-4">Aucune donnée</td></tr>
+          <tr><td colspan="4" class="text-center text-muted py-4">No data available</td></tr>
         <% } %>
         <% parMois.forEach(m => { %>
           <tr>

@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
   });
   
   db.close();
-  res.render('client/commandes', { title: 'Mes Commandes', commandes: commandesAvecDetails });
+  res.render('client/commandes', { title: 'My Orders', commandes: commandesAvecDetails });
 });
 
 module.exports = router;

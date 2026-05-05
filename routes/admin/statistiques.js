@@ -6,10 +6,10 @@ const { getDb } = require('../../database/init');
 router.get('/', (req, res) => {
   const db = getDb();
 
-  // Total plantes en stock
+  // Total plants in stock
   const stockResult = db.prepare('SELECT COALESCE(SUM(quantite), 0) as total FROM plantes').get();
 
-  // CA & Bénéfice total
+  // Total Turnover & Profit
   const totals = db.prepare(`
     SELECT 
       COALESCE(SUM(quantite * prix_unitaire), 0) as ca_total,
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
     FROM details_vente
   `).get();
 
-  // CA & Bénéfice par mois
+  // Turnover & Profit by month
   const parMois = db.prepare(`
     SELECT 
       strftime('%Y-%m', v.date_vente) as mois,
@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
 
   db.close();
   res.render('admin/statistiques', { 
-    title: 'Statistiques', 
+    title: 'Statistics', 
     total_stock: stockResult.total,
     totals, parMois 
   });

@@ -1,7 +1,7 @@
 <%- include('../partials/client_header.html') %>
 
 <div class="container py-4">
-  <a href="/client/catalogue" class="btn btn-outline-primary mb-4"><i class="bi bi-arrow-left me-1"></i>Retour au catalogue</a>
+  <a href="/client/catalogue" class="btn btn-outline-primary mb-4"><i class="bi bi-arrow-left me-1"></i>Back to Catalogue</a>
 
   <div class="row g-4">
     <!-- Plant Image -->
@@ -20,6 +20,7 @@
     <!-- Plant Details -->
     <div class="col-md-7">
       <h1 style="font-family:'Playfair Display',serif;"><%= plante.nom %></h1>
+      <p class="text-muted italic mb-2"><i><%= plante.species || '' %></i></p>
       <span class="badge badge-categorie mb-3" style="font-size:0.85rem;"><%= plante.categorie.replace('_', ' ') %></span>
       
       <div class="plant-price mb-3" style="font-size:1.8rem;"><%= Number(plante.prix).toFixed(2) %> DA</div>
@@ -30,21 +31,30 @@
 
       <!-- Plant Info -->
       <div class="row g-2 mb-4">
-        <div class="col-6">
+        <div class="col-6 col-md-4">
           <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
             <i class="bi bi-droplet-fill" style="color:var(--green-500);"></i>
             <div>
-              <small class="text-muted d-block">Arrosage</small>
-              <span class="fw-bold small"><%= plante.arrosage || 'modéré' %></span>
+              <small class="text-muted d-block">Watering</small>
+              <span class="fw-bold small"><%= plante.watering || 'moderate' %></span>
             </div>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-6 col-md-4">
           <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
             <i class="bi bi-sun-fill" style="color:var(--warm-500);"></i>
             <div>
-              <small class="text-muted d-block">Saison</small>
-              <span class="fw-bold small"><%= (plante.saison || 'toute saison').replace('_', ' ') %></span>
+              <small class="text-muted d-block">Season</small>
+              <span class="fw-bold small"><%= (plante.seasonality || 'all year').replace('_', ' ') %></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4">
+          <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
+            <i class="bi bi-brightness-high" style="color:var(--orange-500);"></i>
+            <div>
+              <small class="text-muted d-block">Light</small>
+              <span class="fw-bold small"><%= (plante.light_needs || 'full sun').replace('_', ' ') %></span>
             </div>
           </div>
         </div>
@@ -57,24 +67,24 @@
             <input type="hidden" name="id_plante" value="<%= plante.id %>">
             <input type="number" name="quantite" value="1" min="1" max="<%= plante.quantite %>" class="form-control" style="width:80px;">
             <button type="submit" class="btn btn-primary btn-lg">
-              <i class="bi bi-cart-plus me-2"></i>Ajouter au panier
+              <i class="bi bi-cart-plus me-2"></i>Add to Cart
             </button>
           </form>
         </div>
         <% if (plante.quantite < 5) { %>
-          <p class="text-danger mt-2"><i class="bi bi-exclamation-circle"></i> Plus que <%= plante.quantite %> en stock !</p>
+          <p class="text-danger mt-2"><i class="bi bi-exclamation-circle"></i> Only <%= plante.quantite %> left in stock!</p>
         <% } else { %>
-          <p class="text-success mt-2"><i class="bi bi-check-circle"></i> En stock (<%= plante.quantite %> disponibles)</p>
+          <p class="text-success mt-2"><i class="bi bi-check-circle"></i> In Stock (<%= plante.quantite %> available)</p>
         <% } %>
       <% } else { %>
-        <div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>Ce produit est actuellement en rupture de stock.</div>
+        <div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>This product is currently out of stock.</div>
       <% } %>
     </div>
   </div>
 
   <!-- Related Plants -->
   <% if (related.length > 0) { %>
-    <h2 class="section-title mt-5 mb-3"><i class="bi bi-heart me-2"></i>Plantes similaires</h2>
+    <h2 class="section-title mt-5 mb-3"><i class="bi bi-heart me-2"></i>Similar Plants</h2>
     <div class="row g-4">
       <% related.forEach(r => { %>
         <div class="col-6 col-md-3">

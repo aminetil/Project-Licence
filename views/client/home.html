@@ -4,10 +4,10 @@
 <section class="client-hero">
   <div class="container">
     <div class="hero-content">
-      <h1 class="hero-title">Bienvenue chez <span class="hero-accent">KHADRA</span></h1>
-      <p class="hero-subtitle">Découvrez notre collection de plantes soigneusement sélectionnées pour embellir votre espace.</p>
+      <h1 class="hero-title">Welcome to <span class="hero-accent">KHADRA</span></h1>
+      <p class="hero-subtitle">Discover our collection of carefully selected plants to beautify your space.</p>
       <a href="/client/catalogue" class="btn btn-accent btn-lg">
-        <i class="bi bi-grid me-2"></i>Voir le catalogue
+        <i class="bi bi-grid me-2"></i>View Catalogue
       </a>
     </div>
   </div>
@@ -16,21 +16,32 @@
 <!-- Categories -->
 <section class="py-5">
   <div class="container">
-    <h2 class="section-title text-center mb-4"> Nos Catégories</h2>
+    <h2 class="section-title text-center mb-4"> Our Categories</h2>
     <div class="row g-3 justify-content-center">
       <% categories.forEach(c => { %>
         <div class="col-6 col-md-3">
           <a href="/client/catalogue?categorie=<%= c.categorie %>" class="category-card text-decoration-none">
             <div class="category-icon">
-              <% if (c.categorie === 'fleur') { %>
-              <% } else if (c.categorie === 'arbre') { %>
-              <% } else if (c.categorie === 'arbuste') { %>
-              <% } else if (c.categorie === 'plante_interieur') { %>
+              <% if (c.categorie === 'flower') { %>
+                <i class="bi bi-flower1"></i>
+              <% } else if (c.categorie === 'tree') { %>
+                <i class="bi bi-tree"></i>
+              <% } else if (c.categorie === 'shrub') { %>
+                <i class="bi bi-flower3"></i>
+              <% } else if (c.categorie === 'indoor_plant') { %>
+                <i class="bi bi-house-heart"></i>
               <% } else if (c.categorie === 'cactus') { %>
-              <% } else { %><% } %>
+                <i class="bi bi-sun"></i>
+              <% } else if (c.categorie === 'aromatic_herb') { %>
+                <i class="bi bi-cup-hot"></i>
+              <% } else if (c.categorie === 'medicinal_plant') { %>
+                <i class="bi bi-bandaid"></i>
+              <% } else { %>
+                <i class="bi bi-flower2"></i>
+              <% } %>
             </div>
             <span class="category-name"><%= c.categorie.replace('_', ' ') %></span>
-            <span class="category-count"><%= c.count %> plantes</span>
+            <span class="category-count"><%= c.count %> plants</span>
           </a>
         </div>
       <% }); %>
@@ -41,7 +52,7 @@
 <!-- Featured Plants -->
 <section class="py-5" style="background: var(--green-25);">
   <div class="container">
-    <h2 class="section-title text-center mb-4"> Plantes en vedette</h2>
+    <h2 class="section-title text-center mb-4"> Featured Plants</h2>
     <div class="row g-4">
       <% featured.forEach(p => { %>
         <div class="col-6 col-md-4 col-lg-3">
@@ -59,7 +70,7 @@
                 <span class="badge badge-categorie mb-2"><%= p.categorie.replace('_', ' ') %></span>
                 <div class="plant-price"><%= Number(p.prix).toFixed(2) %> DA</div>
                 <% if (p.quantite < 5 && p.quantite > 0) { %>
-                  <small class="text-danger"><i class="bi bi-exclamation-circle"></i> Plus que <%= p.quantite %> en stock</small>
+                  <small class="text-danger"><i class="bi bi-exclamation-circle"></i> Only <%= p.quantite %> left in stock</small>
                 <% } %>
               </div>
             </div>
@@ -68,7 +79,7 @@
       <% }); %>
     </div>
     <div class="text-center mt-4">
-      <a href="/client/catalogue" class="btn btn-primary btn-lg">Voir tout le catalogue <i class="bi bi-arrow-right ms-2"></i></a>
+      <a href="/client/catalogue" class="btn btn-primary btn-lg">View Full Catalogue <i class="bi bi-arrow-right ms-2"></i></a>
     </div>
   </div>
 </section>

@@ -1,7 +1,7 @@
 <%- include('../partials/client_header.html') %>
 
 <div class="container py-4">
-  <h1 class="section-title mb-4"><i class="bi bi-person-circle me-2"></i>Mon Profil</h1>
+  <h1 class="section-title mb-4"><i class="bi bi-person-circle me-2"></i>My Profile</h1>
 
   <div class="row g-4">
     <!-- Profile Stats -->
@@ -17,15 +17,15 @@
           <div class="row text-center">
             <div class="col-6">
               <div class="fw-bold" style="font-size:1.5rem; color:var(--green-600);"><%= stats.nb_commandes %></div>
-              <small class="text-muted">Commandes</small>
+              <small class="text-muted">Orders</small>
             </div>
             <div class="col-6">
               <div class="fw-bold" style="font-size:1.5rem; color:var(--green-600);"><%= Number(stats.total_depense).toFixed(0) %> DA</div>
-              <small class="text-muted">Total dépensé</small>
+              <small class="text-muted">Total Spent</small>
             </div>
           </div>
           <hr>
-          <p class="text-muted small mb-0">Membre depuis le <%= new Date(user.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+          <p class="text-muted small mb-0">Member since <%= new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
         </div>
       </div>
     </div>
@@ -33,39 +33,39 @@
     <!-- Edit Profile -->
     <div class="col-md-8">
       <div class="card">
-        <div class="card-header fw-bold"><i class="bi bi-pencil me-2"></i>Modifier le profil</div>
+        <div class="card-header fw-bold"><i class="bi bi-pencil me-2"></i>Edit Profile</div>
         <div class="card-body">
           <form method="POST" action="/client/profil?_method=PUT">
             <div class="row g-3">
               <div class="col-md-6">
-                <label for="nom" class="form-label fw-bold">Nom complet</label>
+                <label for="nom" class="form-label fw-bold">Full Name</label>
                 <input type="text" class="form-control" id="nom" name="nom" value="<%= user.nom %>" required>
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold">Email</label>
                 <input type="email" class="form-control" value="<%= user.email %>" disabled>
-                <small class="text-muted">L'email ne peut pas être modifié</small>
+                <small class="text-muted">Email cannot be changed</small>
               </div>
               <div class="col-md-6">
-                <label for="telephone" class="form-label fw-bold">Téléphone</label>
+                <label for="telephone" class="form-label fw-bold">Phone</label>
                 <input type="text" class="form-control" id="telephone" name="telephone" value="<%= user.telephone || '' %>">
               </div>
               <div class="col-12">
-                <label for="adresse" class="form-label fw-bold">Adresse</label>
+                <label for="adresse" class="form-label fw-bold">Address</label>
                 <textarea class="form-control" id="adresse" name="adresse" rows="2"><%= user.adresse || '' %></textarea>
               </div>
               <div class="col-12"><hr></div>
               <div class="col-md-6">
-                <label for="password" class="form-label fw-bold">Nouveau mot de passe</label>
-                <input type="password" class="form-control" id="password" name="password" minlength="6" placeholder="Laisser vide pour ne pas changer">
+                <label for="password" class="form-label fw-bold">New Password</label>
+                <input type="password" class="form-control" id="password" name="password" minlength="6" placeholder="Leave empty to keep current">
               </div>
               <div class="col-md-6">
-                <label for="confirm_password" class="form-label fw-bold">Confirmer</label>
+                <label for="confirm_password" class="form-label fw-bold">Confirm Password</label>
                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" minlength="6">
               </div>
               <div class="col-12">
                 <button type="submit" class="btn btn-primary px-4">
-                  <i class="bi bi-check-circle me-1"></i>Enregistrer
+                  <i class="bi bi-check-circle me-1"></i>Save Changes
                 </button>
               </div>
             </div>

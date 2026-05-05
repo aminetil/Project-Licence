@@ -11,8 +11,8 @@ router.get('/', (req, res) => {
   const params = [];
   
   if (q) {
-    query += ' AND (nom LIKE ? OR description LIKE ?)';
-    params.push(`%${q}%`, `%${q}%`);
+    query += ' AND (nom LIKE ? OR description LIKE ? OR species LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
   }
   if (categorie) {
     query += ' AND categorie = ?';
@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
   
   if (!plante) {
     db.close();
-    req.flash('error', 'Plante introuvable.');
+    req.flash('error', 'Plant not found.');
     return res.redirect('/client/catalogue');
   }
   

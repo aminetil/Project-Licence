@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   const stats = db.prepare('SELECT COUNT(*) as nb_commandes, COALESCE(SUM(total), 0) as total_depense FROM ventes WHERE id_client = ?').get(req.session.user.id);
   
   db.close();
-  res.render('client/profil', { title: 'Mon Profil', user, stats });
+  res.render('client/profil', { title: 'My Profile', user, stats });
 });
 
 // PUT /client/profil — Update profile
@@ -27,7 +27,7 @@ router.put('/', (req, res) => {
   if (password && password.length >= 6) {
     if (password !== confirm_password) {
       db.close();
-      req.flash('error', 'Les mots de passe ne correspondent pas.');
+      req.flash('error', 'Passwords do not match.');
       return res.redirect('/client/profil');
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -38,7 +38,7 @@ router.put('/', (req, res) => {
   req.session.user.nom = nom;
   
   db.close();
-  req.flash('success', 'Profil mis à jour avec succès.');
+  req.flash('success', 'Profile updated successfully.');
   res.redirect('/client/profil');
 });
 

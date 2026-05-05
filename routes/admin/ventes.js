@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
   });
 
   db.close();
-  res.render('admin/ventes', { title: 'Gestion des ventes', ventes: ventesAvecDetails });
+  res.render('admin/ventes', { title: 'Sales Management', ventes: ventesAvecDetails });
 });
 
 // PUT /admin/ventes/:id/statut — Update sale status
@@ -36,7 +36,7 @@ router.put('/:id/statut', (req, res) => {
   const db = getDb();
   db.prepare('UPDATE ventes SET statut = ? WHERE id = ?').run(statut, req.params.id);
   db.close();
-  req.flash('success', 'Statut de la vente mis à jour.');
+  req.flash('success', 'Sale status updated.');
   res.redirect('/admin/ventes');
 });
 

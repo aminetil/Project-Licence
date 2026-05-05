@@ -40,10 +40,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// ── Auth middleware (Rôles) ──
+// ── Auth middleware (Roles) ──
 function requireAuth(req, res, next) {
   if (!req.session.user) {
-    req.flash('error', 'Veuillez vous connecter.');
+    req.flash('error', 'Please log in.');
     return res.redirect('/login');
   }
   next();
@@ -51,11 +51,11 @@ function requireAuth(req, res, next) {
 
 function requireAdmin(req, res, next) {
   if (!req.session.user) {
-    req.flash('error', 'Veuillez vous connecter.');
+    req.flash('error', 'Please log in.');
     return res.redirect('/login');
   }
   if (req.session.user.role !== 'admin' && req.session.user.role !== 'vendeur') {
-    req.flash('error', 'Accès refusé. Espace réservé aux administrateurs.');
+    req.flash('error', 'Access denied. Reserved for administrators.');
     return res.redirect('/client/home');
   }
   next();
@@ -63,27 +63,27 @@ function requireAdmin(req, res, next) {
 
 function requireClient(req, res, next) {
   if (!req.session.user) {
-    req.flash('error', 'Veuillez vous connecter pour accéder à votre espace.');
+    req.flash('error', 'Please log in to access your space.');
     return res.redirect('/login');
   }
   if (req.session.user.role !== 'client') {
-    return res.redirect('/admin/plantes'); // Les admins n'ont pas d'espace client propre
+    return res.redirect('/admin/plantes'); // Admins don't have their own client space
   }
   next();
 }
 
-// ── Routes d'Authentification ──
+// ── Authentication Routes ──
 const authRoutes = require('./routes/auth');
 app.use('/', authRoutes);
 
-// ── Routes Admin ──
+// ── Admin Routes ──
 const adminPlantesRoutes = require('./routes/admin/plantes');
 const adminStockRoutes = require('./routes/admin/stock');
 const adminVentesRoutes = require('./routes/admin/ventes');
 const adminUsersRoutes = require('./routes/admin/utilisateurs');
 const adminStatsRoutes = require('./routes/admin/statistiques');
 
-// Redirect old dashboard to plantes
+// Redirect old dashboard to plants
 app.get('/admin/dashboard', requireAdmin, (req, res) => res.redirect('/admin/plantes'));
 app.use('/admin/plantes', requireAdmin, adminPlantesRoutes);
 app.use('/admin/stock', requireAdmin, adminStockRoutes);
@@ -91,7 +91,7 @@ app.use('/admin/ventes', requireAdmin, adminVentesRoutes);
 app.use('/admin/utilisateurs', requireAdmin, adminUsersRoutes);
 app.use('/admin/statistiques', requireAdmin, adminStatsRoutes);
 
-// ── Routes Client ──
+// ── Client Routes ──
 const clientHomeRoutes = require('./routes/client/home');
 const clientCatalogueRoutes = require('./routes/client/catalogue');
 const clientPanierRoutes = require('./routes/client/panier');
@@ -108,7 +108,7 @@ app.use('/client/profil', requireClient, clientProfilRoutes);
 // ── Home redirect ──
 app.get('/', (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/client/home'); // Nouveaux visiteurs e-commerce !
+    return res.redirect('/client/home'); 
   }
   if (req.session.user.role === 'admin' || req.session.user.role === 'vendeur') {
     return res.redirect('/admin/plantes');
@@ -119,14 +119,14 @@ app.get('/', (req, res) => {
 
 // ── 404 ──
 app.use((req, res) => {
-  res.status(404).render('404', { title: 'Page non trouvée' });
+  res.status(404).render('404', { title: 'Page Not Found' });
 });
 
 // ── Start server ──
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`\n🌿 KHADRA E-Commerce & Management System`);
-  console.log(`🌐 Serveur démarré sur http://localhost:${PORT}`);
+  console.log(`🌐 Server started on http://localhost:${PORT}`);
   console.log(`👨‍💼 Admin: admin@pepiniere.com / password123`);
   console.log(`👤 Client: karim@client.com / password123\n`);
 });

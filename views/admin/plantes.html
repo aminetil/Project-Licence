@@ -1,9 +1,9 @@
 <%- include('../partials/header.html') %>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="mb-0"><i class="bi bi-flower1 me-2"></i>Gestion des plantes</h1>
+  <h1 class="mb-0"><i class="bi bi-flower1 me-2"></i>Plant Management</h1>
   <a href="/admin/plantes/ajouter" class="btn btn-primary">
-    <i class="bi bi-plus-circle me-1"></i> Ajouter une plante
+    <i class="bi bi-plus-circle me-1"></i> Add a Plant
   </a>
 </div>
 
@@ -14,17 +14,17 @@
         <thead>
           <tr>
             <th>Image</th>
-            <th>Nom</th>
-            <th>Catégorie</th>
-            <th>Coût (DA)</th>
-            <th>Prix (DA)</th>
+            <th>Name & Species</th>
+            <th>Category</th>
+            <th>Growth Status</th>
+            <th>Price (DA)</th>
             <th>Stock</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <% if (plantes.length === 0) { %>
-            <tr><td colspan="7" class="text-center text-muted py-4">Aucune plante enregistrée</td></tr>
+            <tr><td colspan="7" class="text-center text-muted py-4">No plants registered</td></tr>
           <% } %>
           <% plantes.forEach(p => { %>
             <tr>
@@ -37,13 +37,26 @@
                   </div>
                 <% } %>
               </td>
-              <td class="fw-bold"><%= p.nom %></td>
-              <td><span class="badge badge-categorie"><%= p.categorie %></span></td>
-              <td><%= Number(p.cout).toFixed(2) %></td>
+              <td>
+                <div class="fw-bold"><%= p.nom %></div>
+                <small class="text-muted italic"><i><%= p.species || '' %></i></small>
+              </td>
+              <td><span class="badge badge-categorie"><%= p.categorie.replace('_', ' ') %></span></td>
+              <td>
+                <% if (p.growth_status === 'seedling') { %>
+                  <span class="badge bg-info text-dark">Seedling</span>
+                <% } else if (p.growth_status === 'transplanting') { %>
+                  <span class="badge bg-warning text-dark">Transplanting</span>
+                <% } else if (p.growth_status === 'growing') { %>
+                  <span class="badge bg-primary">Growing</span>
+                <% } else { %>
+                  <span class="badge bg-success">Ready to Sell</span>
+                <% } %>
+              </td>
               <td class="fw-bold" style="color: var(--green-600);"><%= Number(p.prix).toFixed(2) %></td>
               <td>
                 <% if (p.quantite < 5) { %>
-                  <span class="badge badge-stock-low"><i class="bi bi-exclamation-triangle me-1"></i><%= p.quantite %> — Stock faible</span>
+                  <span class="badge badge-stock-low"><i class="bi bi-exclamation-triangle me-1"></i><%= p.quantite %> — Low stock</span>
                 <% } else if (p.quantite < 15) { %>
                   <span class="badge badge-stock-medium"><%= p.quantite %></span>
                 <% } else { %>
@@ -51,11 +64,11 @@
                 <% } %>
               </td>
               <td>
-                <a href="/admin/plantes/<%= p.id %>/modifier" class="btn btn-sm btn-outline-primary me-1" title="Modifier">
+                <a href="/admin/plantes/<%= p.id %>/modifier" class="btn btn-sm btn-outline-primary me-1" title="Edit">
                   <i class="bi bi-pencil"></i>
                 </a>
-                <form method="POST" action="/admin/plantes/<%= p.id %>?_method=DELETE" style="display:inline;" onsubmit="return confirm('Supprimer cette plante ?')">
-                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                <form method="POST" action="/admin/plantes/<%= p.id %>?_method=DELETE" style="display:inline;" onsubmit="return confirm('Delete this plant?')">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
                     <i class="bi bi-trash"></i>
                   </button>
                 </form>

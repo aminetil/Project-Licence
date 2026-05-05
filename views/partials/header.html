@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,15 +31,15 @@
         <i class="bi bi-list"></i>
       </button>
       <div class="nav-links" id="navLinks">
-        <a href="/admin/plantes" class="nav-link-item <%= currentPath.startsWith('/admin/plantes') ? 'active' : '' %>"><i class="bi bi-flower1"></i> Plantes</a>
+        <a href="/admin/plantes" class="nav-link-item <%= currentPath.startsWith('/admin/plantes') ? 'active' : '' %>"><i class="bi bi-flower1"></i> Plants</a>
         <a href="/admin/stock" class="nav-link-item <%= currentPath.startsWith('/admin/stock') ? 'active' : '' %>"><i class="bi bi-box-seam-fill"></i> Stock</a>
-        <a href="/admin/ventes" class="nav-link-item <%= currentPath.startsWith('/admin/ventes') ? 'active' : '' %>"><i class="bi bi-cart-fill"></i> Ventes</a>
-        <a href="/admin/statistiques" class="nav-link-item <%= currentPath.startsWith('/admin/statistiques') ? 'active' : '' %>"><i class="bi bi-bar-chart-line"></i> Statistiques</a>
-        <a href="/admin/utilisateurs" class="nav-link-item <%= currentPath.startsWith('/admin/utilisateurs') ? 'active' : '' %>"><i class="bi bi-people-fill"></i> Utilisateurs</a>
+        <a href="/admin/ventes" class="nav-link-item <%= currentPath.startsWith('/admin/ventes') ? 'active' : '' %>"><i class="bi bi-cart-fill"></i> Sales</a>
+        <a href="/admin/statistiques" class="nav-link-item <%= currentPath.startsWith('/admin/statistiques') ? 'active' : '' %>"><i class="bi bi-bar-chart-line"></i> Statistics</a>
+        <a href="/admin/utilisateurs" class="nav-link-item <%= currentPath.startsWith('/admin/utilisateurs') ? 'active' : '' %>"><i class="bi bi-people-fill"></i> Users</a>
       </div>
       <div class="nav-user">
         <span class="nav-user-name"><%= currentUser.nom %></span>
-        <a href="/logout" class="nav-logout" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
+        <a href="/logout" class="nav-logout" title="Logout"><i class="bi bi-box-arrow-right"></i></a>
       </div>
     </div>
   </nav>

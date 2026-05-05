@@ -1,40 +1,40 @@
 <%- include('../partials/client_header.html') %>
 
 <div class="container py-4">
-  <h1 class="section-title mb-4"><i class="bi bi-grid me-2"></i>Catalogue des plantes</h1>
+  <h1 class="section-title mb-4"><i class="bi bi-grid me-2"></i>Plant Catalogue</h1>
 
   <!-- Search & Filter Bar -->
   <div class="search-bar d-flex flex-wrap gap-3 align-items-end mb-4">
     <form method="GET" action="/client/catalogue" class="d-flex flex-wrap gap-3 w-100">
       <div class="flex-grow-1">
-        <label class="form-label small fw-bold">Rechercher</label>
-        <input type="text" class="form-control" name="q" value="<%= search %>" placeholder="Nom de plante...">
+        <label class="form-label small fw-bold">Search</label>
+        <input type="text" class="form-control" name="q" value="<%= search %>" placeholder="Plant name or species...">
       </div>
       <div style="min-width:180px;">
-        <label class="form-label small fw-bold">Catégorie</label>
+        <label class="form-label small fw-bold">Category</label>
         <select class="form-select" name="categorie">
-          <option value="">Toutes</option>
+          <option value="">All Categories</option>
           <% categories.forEach(c => { %>
             <option value="<%= c.categorie %>" <%= selectedCategorie === c.categorie ? 'selected' : '' %>><%= c.categorie.replace('_', ' ') %></option>
           <% }); %>
         </select>
       </div>
       <div class="d-flex align-items-end gap-2">
-        <button type="submit" class="btn btn-primary"><i class="bi bi-search me-1"></i>Filtrer</button>
-        <a href="/client/catalogue" class="btn btn-outline-secondary">Réinitialiser</a>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-search me-1"></i>Filter</button>
+        <a href="/client/catalogue" class="btn btn-outline-secondary">Reset</a>
       </div>
     </form>
   </div>
 
   <!-- Results count -->
-  <p class="text-muted mb-3"><%= plantes.length %> plante(s) trouvée(s)</p>
+  <p class="text-muted mb-3"><%= plantes.length %> plant(s) found</p>
 
   <!-- Plant Grid -->
   <div class="row g-4">
     <% if (plantes.length === 0) { %>
       <div class="col-12 text-center py-5">
         <i class="bi bi-search" style="font-size:3rem; color:var(--gray-400);"></i>
-        <p class="text-muted mt-3">Aucune plante trouvée. Essayez d'autres critères.</p>
+        <p class="text-muted mt-3">No plants found. Try different criteria.</p>
       </div>
     <% } %>
     <% plantes.forEach(p => { %>
@@ -52,6 +52,7 @@
           <div class="p-3">
             <a href="/client/catalogue/<%= p.id %>" class="text-decoration-none">
               <div class="plant-name"><%= p.nom %></div>
+              <small class="text-muted d-block mb-1"><i><%= p.species || '' %></i></small>
             </a>
             <span class="badge badge-categorie mb-2"><%= p.categorie.replace('_', ' ') %></span>
             <div class="d-flex justify-content-between align-items-center">
@@ -60,16 +61,16 @@
                 <form method="POST" action="/client/panier/ajouter" style="display:inline;">
                   <input type="hidden" name="id_plante" value="<%= p.id %>">
                   <input type="hidden" name="quantite" value="1">
-                  <button type="submit" class="btn btn-sm btn-primary" title="Ajouter au panier">
+                  <button type="submit" class="btn btn-sm btn-primary" title="Add to Cart">
                     <i class="bi bi-cart-plus"></i>
                   </button>
                 </form>
               <% } else { %>
-                <span class="badge badge-stock-low">Épuisé</span>
+                <span class="badge badge-stock-low">Out of Stock</span>
               <% } %>
             </div>
             <% if (p.quantite > 0 && p.quantite < 5) { %>
-              <small class="text-danger mt-1 d-block"><i class="bi bi-exclamation-circle"></i> Plus que <%= p.quantite %></small>
+              <small class="text-danger mt-1 d-block"><i class="bi bi-exclamation-circle"></i> Only <%= p.quantite %> left</small>
             <% } %>
           </div>
         </div>

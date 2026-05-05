@@ -1,13 +1,13 @@
 <%- include('../partials/client_header.html') %>
 
 <div class="container py-4">
-  <h1 class="section-title mb-4"><i class="bi bi-cart3 me-2"></i>Mon Panier</h1>
+  <h1 class="section-title mb-4"><i class="bi bi-cart3 me-2"></i>My Cart</h1>
 
   <% if (items.length === 0) { %>
     <div class="text-center py-5">
       <i class="bi bi-cart-x" style="font-size:4rem; color:var(--gray-400);"></i>
-      <h3 class="text-muted mt-3">Votre panier est vide</h3>
-      <a href="/client/catalogue" class="btn btn-primary mt-3"><i class="bi bi-grid me-2"></i>Voir le catalogue</a>
+      <h3 class="text-muted mt-3">Your cart is empty</h3>
+      <a href="/client/catalogue" class="btn btn-primary mt-3"><i class="bi bi-grid me-2"></i>View Catalogue</a>
     </div>
   <% } else { %>
     <div class="row g-4">
@@ -18,10 +18,10 @@
             <table class="table table-hover mb-0">
               <thead>
                 <tr>
-                  <th>Plante</th>
-                  <th>Prix</th>
-                  <th style="width:120px;">Quantité</th>
-                  <th>Sous-total</th>
+                  <th>Plant</th>
+                  <th>Price</th>
+                  <th style="width:120px;">Quantity</th>
+                  <th>Subtotal</th>
                   <th></th>
                 </tr>
               </thead>
@@ -37,7 +37,10 @@
                             <i class="bi bi-flower1" style="color:var(--green-400);"></i>
                           </div>
                         <% } %>
-                        <strong><%= item.plante.nom %></strong>
+                        <div>
+                          <div class="fw-bold"><%= item.plante.nom %></div>
+                          <small class="text-muted"><i><%= item.plante.species || '' %></i></small>
+                        </div>
                       </div>
                     </td>
                     <td><%= Number(item.plante.prix).toFixed(2) %> DA</td>
@@ -51,7 +54,7 @@
                     <td>
                       <form method="POST" action="/client/panier/supprimer">
                         <input type="hidden" name="id_plante" value="<%= item.id_plante %>">
-                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Retirer"><i class="bi bi-trash"></i></button>
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove"><i class="bi bi-trash"></i></button>
                       </form>
                     </td>
                   </tr>
@@ -65,10 +68,10 @@
       <!-- Order Summary -->
       <div class="col-lg-4">
         <div class="card">
-          <div class="card-header fw-bold"><i class="bi bi-receipt me-2"></i>Résumé</div>
+          <div class="card-header fw-bold"><i class="bi bi-receipt me-2"></i>Summary</div>
           <div class="card-body">
             <div class="d-flex justify-content-between mb-2">
-              <span>Articles (<%= items.reduce((s, i) => s + i.quantite, 0) %>)</span>
+              <span>Items (<%= items.reduce((s, i) => s + i.quantite, 0) %>)</span>
               <span><%= total.toFixed(2) %> DA</span>
             </div>
             <hr>
@@ -78,11 +81,11 @@
             </div>
             <form method="POST" action="/client/panier/commander">
               <button type="submit" class="btn btn-primary w-100 btn-lg">
-                <i class="bi bi-bag-check me-2"></i>Passer la commande
+                <i class="bi bi-bag-check me-2"></i>Place Order
               </button>
             </form>
             <a href="/client/catalogue" class="btn btn-outline-secondary w-100 mt-2">
-              <i class="bi bi-arrow-left me-1"></i>Continuer les achats
+              <i class="bi bi-arrow-left me-1"></i>Continue Shopping
             </a>
           </div>
         </div>
