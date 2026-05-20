@@ -21,7 +21,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(methodOverride('_method'));
+// method-override: check both body (urlencoded forms) and query string (multipart forms with ?_method=PUT)
+app.use(methodOverride('_method', { methods: ['POST', 'GET'] }));
+app.use(methodOverride((req) => {
+  if (req.query && req.query._method) return req.query._method;
+}));
+// Ensure req.body is always initialized (multer v2 + Express v5 compatibility fix)
+app.use((req, res, next) => {
+  if (req.body === undefined) req.body = {};
+  next();
+});
 app.use(session({
   secret: 'pepiniere-smart-2026-secret-key',
   resave: false,
