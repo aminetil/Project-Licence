@@ -14,7 +14,7 @@ function getDb() {
 function initDatabase() {
   const db = getDb();
 
-  // ── Table users ──
+  
   db.exec(`
     CREATE TABLE IF NOT EXISTS utilisateurs (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,7 +28,7 @@ function initDatabase() {
     )
   `);
 
-  // ── Table plants ──
+  
   db.exec(`
     CREATE TABLE IF NOT EXISTS plantes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,7 +52,7 @@ function initDatabase() {
     )
   `);
 
-  // ── Table sales ──
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS ventes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,7 +66,7 @@ function initDatabase() {
     )
   `);
 
-  // ── Table sale details ──
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS details_vente (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,7 +80,7 @@ function initDatabase() {
     )
   `);
 
-  // ── Table stock movements ──
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS stock_mouvements (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -101,22 +101,28 @@ function initDatabase() {
 function seedDatabase() {
   const db = getDb();
 
-  const adminExists = db.prepare('SELECT COUNT(*) as count FROM utilisateurs').get();
-  if (adminExists.count > 0) {
-    db.close();
-    console.log(' Database already seeded.');
-    return;
-  }
-
   const hashedPassword = bcrypt.hashSync('password123', 10);
 
-  // ── Seed users ──
+
   const insertUser = db.prepare('INSERT INTO utilisateurs (nom, email, mot_de_passe, role, telephone, adresse) VALUES (?, ?, ?, ?, ?, ?)');
 
-  const adminId   = insertUser.run('Admin KHADRA',    'admin@pepiniere.com',   hashedPassword, 'admin',   null, null).lastInsertRowid;
-  const vendeurId = insertUser.run('Mohamed Seller',  'mohamed@pepiniere.com', hashedPassword, 'vendeur', null, null).lastInsertRowid;
-  const client1   = insertUser.run('Karim Benali',    'karim@client.com',      hashedPassword, 'client',  '0555123456', '12 Flower Street, Algiers').lastInsertRowid;
-  const client2   = insertUser.run('Fatima Zahra',    'fatima@client.com',     hashedPassword, 'client',  '0661234567', '34 Main Avenue, Oran').lastInsertRowid;
+  const userCount = db.prepare('SELECT COUNT(*) as count FROM utilisateurs').get();
+  let adminId = null;
+  let vendeurId = null;
+  let client1 = null;
+  let client2 = null;
+
+  if (userCount.count === 0) {
+    adminId   = insertUser.run('Admin KHADRA',    'admin@pepiniere.com',   hashedPassword, 'admin',   null, null).lastInsertRowid;
+    vendeurId = insertUser.run('Mohamed Seller',  'mohamed@pepiniere.com', hashedPassword, 'vendeur', null, null).lastInsertRowid;
+    client1   = insertUser.run('Karim Benali',    'karim@client.com',      hashedPassword, 'client',  '0555123456', '12 Flower Street, Algiers').lastInsertRowid;
+    client2   = insertUser.run('Fatima Zahra',    'fatima@client.com',     hashedPassword, 'client',  '0661234567', '34 Main Avenue, Oran').lastInsertRowid;
+  } else {
+    adminId = db.prepare('SELECT id FROM utilisateurs WHERE email = ?').get('admin@pepiniere.com')?.id || null;
+    vendeurId = db.prepare('SELECT id FROM utilisateurs WHERE email = ?').get('mohamed@pepiniere.com')?.id || null;
+    client1 = db.prepare('SELECT id FROM utilisateurs WHERE email = ?').get('karim@client.com')?.id || null;
+    client2 = db.prepare('SELECT id FROM utilisateurs WHERE email = ?').get('fatima@client.com')?.id || null;
+  }
 
   // ── Seed plants ──
   const insertPlante = db.prepare(`
@@ -126,44 +132,63 @@ function seedDatabase() {
 
   // [name, species, category, cost, price, qty, description, image, growth_status, seasonality, watering, light_needs, location]
   const plantsData = [
-    ['Red Rose',         'Rosa gallica',           'flower',         5.0,  15.0, 50, 'Classic vibrant red rose.',              null, 'ready_to_sell', 'spring',   'moderate', 'full_sun',      'plot_A'],
-    ['Jasmine',          'Jasminum officinale',    'flower',         4.0,  12.0, 35, 'White climbing flower with fragrance.',  null, 'growing',       'spring',   'moderate', 'full_sun',      'plot_A'],
-    ['Olive Tree',       'Olea europaea',          'tree',           20.0, 45.0, 20, 'Iconic drought-resistant tree.',         null, 'ready_to_sell', 'all_year', 'low',      'full_sun',      'plot_B'],
-    ['Lemon Tree',       'Citrus limon',           'tree',           15.0, 35.0, 15, 'Fruit tree producing fresh lemons.',     null, 'growing',       'all_year', 'moderate', 'full_sun',      'plot_B'],
+    ['Red Rose',         'Rose',                   'flower',         100.0,350.0,53, null,                                      '/uploads/plant-1779317086067.jpg',  'ready_to_sell', 'spring',   'moderate', 'full_sun',      'greenhouse'],
+    ['Jasmine',          'Jasminum',               'tree',           500.0,1200.0,35,'White climbing flower with fragrance.',  '/uploads/plant-1779317496613.webp', 'growing',       'spring',   'moderate', 'full_sun',      'plot_A'],
+    ['Olive Tree',       'olive',                  'tree',           650.0,1500.0,20,null,                                      '/uploads/plant-1779317599613.jpg',  'ready_to_sell', 'all_year', 'low',      'full_sun',      'plot_B'],
+    ['Lemon Tree',       'Citrus',                 'tree',           230.0,1250.0,15,'Fruit tree producing fresh lemons.',     '/uploads/plant-1779317685887.webp', 'growing',       'all_year', 'moderate', 'full_sun',      'plot_B'],
     ['Bougainvillea',    'Bougainvillea spectabilis','shrub',         8.0,  18.0, 40, 'Colorful climbing shrub.',               null, 'ready_to_sell', 'summer',   'low',      'full_sun',      'outdoor'],
+    ['Spider Plant',     'Chlorophytum comosum',   'indoor_plant',   200.0,600.0,28,'Large popular indoor plant.',             '/uploads/plant-1779318061471.jpg',  'ready_to_sell', 'all_year', 'moderate', 'partial_shade', 'plot_B'],
     ['Ficus',            'Ficus benjamina',        'indoor_plant',   10.0, 25.0, 28, 'Large popular indoor plant.',            null, 'ready_to_sell', 'all_year', 'moderate', 'partial_shade', 'greenhouse'],
     ['Monstera',         'Monstera deliciosa',     'indoor_plant',   12.0, 30.0, 18, 'Trendy tropical indoor plant.',          null, 'growing',       'all_year', 'moderate', 'partial_shade', 'greenhouse'],
     ['Aloe Vera',        'Aloe vera',              'cactus',         3.0,  10.0, 60, 'Succulent plant with healing properties.',null,'ready_to_sell', 'all_year', 'low',      'full_sun',      'greenhouse'],
     ['Lavender',         'Lavandula angustifolia', 'aromatic_herb',  4.0,  9.0,  45, 'Fragrant purple flowering herb.',        null, 'ready_to_sell', 'summer',   'low',      'full_sun',      'plot_A'],
     ['Chamomile',        'Matricaria chamomilla',  'medicinal_plant',3.0,  8.0,  30, 'Medicinal herb with calming properties.',null,'growing',       'spring',   'moderate', 'full_sun',      'zone_1'],
     ['Peppermint',       'Mentha piperita',        'medicinal_plant',2.5,  7.0,  50, 'Aromatic medicinal mint plant.',         null, 'ready_to_sell', 'all_year', 'high',     'partial_shade', 'zone_1'],
+    ['Ginger Plant',     'Zingiber officinale',    'medicinal_plant',600.0,1300.0,32,null,                                     '/uploads/plant-1779318389676.jpg',  'seedling',      'spring',   'moderate', 'full_sun',      'greenhouse'],
+    ['Sunflower',        'Helianthus annuus',      'flower',         150.0,550.0,43, null,                                      '/uploads/plant-1779318726321.jpeg', 'ready_to_sell', 'summer',   'moderate', 'full_sun',      'zone_2'],
     ['Weeping Willow',   'Salix babylonica',       'tree',           25.0, 55.0, 8,  'Majestic ornamental weeping tree.',      null, 'seedling',      'all_year', 'high',     'full_sun',      'zone_2'],
     ['Rosemary',         'Salvia rosmarinus',      'aromatic_herb',  3.5,  8.5,  40, 'Culinary and aromatic herb.',            null, 'ready_to_sell', 'all_year', 'low',      'full_sun',      'plot_B'],
   ];
 
   for (const p of plantsData) {
-    insertPlante.run(...p);
+    const existing = db.prepare(`
+      SELECT id FROM plantes
+      WHERE lower(trim(nom)) = lower(trim(?))
+      LIMIT 1
+    `).get(p[0]);
+
+    if (!existing) {
+      insertPlante.run(...p);
+    }
   }
 
-  // ── Seed past sales ──
+
+  const salesCount = db.prepare('SELECT COUNT(*) as count FROM ventes').get();
+  if (salesCount.count > 0 || !adminId || !vendeurId || !client1 || !client2) {
+    db.close();
+    console.log(' Database synced (users and missing plants checked).');
+    return;
+  }
+
   const insertVente  = db.prepare('INSERT INTO ventes (date_vente, id_client, id_employe, total, statut) VALUES (?, ?, ?, ?, ?)');
   const insertDetail = db.prepare('INSERT INTO details_vente (id_vente, id_plante, quantite, prix_unitaire, cout_unitaire) VALUES (?, ?, ?, ?, ?)');
+  const getPlantId = db.prepare('SELECT id FROM plantes WHERE nom = ? LIMIT 1');
 
   let v1 = insertVente.run('2026-03-10', client1, vendeurId, 45.0, 'paid');
-  insertDetail.run(v1.lastInsertRowid, 1, 3, 15.0, 5.0);
+  insertDetail.run(v1.lastInsertRowid, getPlantId.get('Red Rose').id, 3, 15.0, 5.0);
 
   let v2 = insertVente.run('2026-03-15', client2, adminId, 35.0, 'paid');
-  insertDetail.run(v2.lastInsertRowid, 3, 1, 35.0, 15.0);
+  insertDetail.run(v2.lastInsertRowid, getPlantId.get('Olive Tree').id, 1, 35.0, 15.0);
 
   let v3 = insertVente.run('2026-04-01', client2, null, 30.0, 'paid');
-  insertDetail.run(v3.lastInsertRowid, 7, 1, 30.0, 12.0);
+  insertDetail.run(v3.lastInsertRowid, getPlantId.get('Monstera').id, 1, 30.0, 12.0);
 
   let v4 = insertVente.run('2026-04-20', client1, vendeurId, 19.0, 'pending');
-  insertDetail.run(v4.lastInsertRowid, 9, 2, 9.0, 4.0);
-  insertDetail.run(v4.lastInsertRowid, 11, 1, 7.0, 2.5);
+  insertDetail.run(v4.lastInsertRowid, getPlantId.get('Lavender').id, 2, 9.0, 4.0);
+  insertDetail.run(v4.lastInsertRowid, getPlantId.get('Peppermint').id, 1, 7.0, 2.5);
 
   db.close();
-  console.log('🌱 Test data inserted (Admin, Clients, Plants, and Sales).');
+  console.log(' Test data inserted (Admin, Clients, Plants, and Sales).');
 }
 
 module.exports = { getDb, initDatabase, seedDatabase };
