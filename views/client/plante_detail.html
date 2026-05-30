@@ -33,15 +33,6 @@
       <div class="row g-2 mb-4">
         <div class="col-6 col-md-4">
           <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
-            <i class="bi bi-droplet-fill" style="color:var(--green-500);"></i>
-            <div>
-              <small class="text-muted d-block">Watering</small>
-              <span class="fw-bold small"><%= plante.watering || 'moderate' %></span>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-md-4">
-          <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
             <i class="bi bi-sun-fill" style="color:var(--warm-500);"></i>
             <div>
               <small class="text-muted d-block">Season</small>
@@ -49,19 +40,13 @@
             </div>
           </div>
         </div>
-        <div class="col-6 col-md-4">
-          <div class="d-flex align-items-center gap-2 p-2" style="background:var(--gray-50); border-radius:8px;">
-            <i class="bi bi-brightness-high" style="color:var(--orange-500);"></i>
-            <div>
-              <small class="text-muted d-block">Light</small>
-              <span class="fw-bold small"><%= (plante.light_needs || 'full sun').replace('_', ' ') %></span>
-            </div>
-          </div>
-        </div>
       </div>
 
+
       <!-- Stock Info & Add to Cart -->
-      <% if (plante.quantite > 0) { %>
+      <% if (plante.growth_status !== 'ready to sell') { %>
+        <div class="alert alert-warning"><i class="bi bi-hourglass-split me-2"></i>This plant is currently in the <strong><span style="text-transform: capitalize;"><%= plante.growth_status.replace('_', ' ') %></span></strong> phase and cannot be purchased yet.</div>
+      <% } else if (plante.quantite > 0) { %>
         <div class="d-flex align-items-center gap-3">
           <form method="POST" action="/client/panier/ajouter" class="d-flex align-items-center gap-2">
             <input type="hidden" name="id_plante" value="<%= plante.id %>">

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDb } = require('../../database/init');
 
-// GET /client/commandes — Order history
+
 router.get('/', (req, res) => {
   const db = getDb();
   const commandes = db.prepare(`
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     ORDER BY v.date_vente DESC
   `).all(req.session.user.id);
   
-  // Get details for each order
+
   const commandesAvecDetails = commandes.map(c => {
     const details = db.prepare(`
       SELECT dv.*, p.nom as plante_nom, p.image as plante_image

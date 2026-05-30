@@ -4,6 +4,47 @@
   <h1 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>Statistics</h1>
 </div>
 
+<!-- Filter Form -->
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="GET" action="/admin/statistiques" class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label class="form-label fw-bold"><i class="bi bi-calendar me-2"></i>Year</label>
+        <select name="year" class="form-select">
+          <option value="">All Years</option>
+          <% availableYears.forEach(y => { %>
+            <option value="<%= y %>" <%= query.year === y ? 'selected' : '' %>><%= y %></option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-bold"><i class="bi bi-calendar-month me-2"></i>Month</label>
+        <select name="month" class="form-select">
+          <option value="">All Months</option>
+          <option value="01" <%= query.month === '01' ? 'selected' : '' %>>January</option>
+          <option value="02" <%= query.month === '02' ? 'selected' : '' %>>February</option>
+          <option value="03" <%= query.month === '03' ? 'selected' : '' %>>March</option>
+          <option value="04" <%= query.month === '04' ? 'selected' : '' %>>April</option>
+          <option value="05" <%= query.month === '05' ? 'selected' : '' %>>May</option>
+          <option value="06" <%= query.month === '06' ? 'selected' : '' %>>June</option>
+          <option value="07" <%= query.month === '07' ? 'selected' : '' %>>July</option>
+          <option value="08" <%= query.month === '08' ? 'selected' : '' %>>August</option>
+          <option value="09" <%= query.month === '09' ? 'selected' : '' %>>September</option>
+          <option value="10" <%= query.month === '10' ? 'selected' : '' %>>October</option>
+          <option value="11" <%= query.month === '11' ? 'selected' : '' %>>November</option>
+          <option value="12" <%= query.month === '12' ? 'selected' : '' %>>December</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel me-2"></i>Apply Filter</button>
+      </div>
+      <div class="col-md-3">
+        <a href="/admin/statistiques" class="btn btn-outline-secondary w-100"><i class="bi bi-arrow-counterclockwise me-2"></i>Reset</a>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Summary Cards -->
 <div class="row g-4 mb-4">
   <div class="col-md-3">

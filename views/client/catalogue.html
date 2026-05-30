@@ -57,7 +57,9 @@
             <span class="badge badge-categorie mb-2"><%= p.categorie.replace('_', ' ') %></span>
             <div class="d-flex justify-content-between align-items-center">
               <span class="plant-price"><%= Number(p.prix).toFixed(2) %> DA</span>
-              <% if (p.quantite > 0) { %>
+              <% if (p.growth_status !== 'ready to sell') { %>
+                <span class="badge bg-warning text-dark" style="text-transform: capitalize;"><%= p.growth_status.replace('_', ' ') %></span>
+              <% } else if (p.quantite > 0) { %>
                 <form method="POST" action="/client/panier/ajouter" style="display:inline;">
                   <input type="hidden" name="id_plante" value="<%= p.id %>">
                   <input type="hidden" name="quantite" value="1">

@@ -19,12 +19,18 @@
             <span class="text-muted ms-2">— <%= new Date(c.date_vente).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
           </div>
           <div>
-            <% if (c.statut === 'paid') { %>
-              <span class="badge badge-stock-ok"> Paid</span>
+            <% if (c.statut === 'delivered') { %>
+              <span class="badge bg-success"> Delivered</span>
             <% } else if (c.statut === 'pending') { %>
-              <span class="badge badge-stock-medium"> Pending</span>
+              <span class="badge bg-warning text-dark"> Pending</span>
+            <% } else if (c.statut === 'confirmed') { %>
+              <span class="badge bg-info text-dark"> Confirmed</span>
+            <% } else if (c.statut === 'in delivery') { %>
+              <span class="badge bg-primary"> In delivery</span>
             <% } else if (c.statut === 'cancelled') { %>
-              <span class="badge badge-stock-low"> Cancelled</span>
+              <span class="badge bg-danger"> Cancelled</span>
+            <% } else { %>
+              <span class="badge bg-secondary"><%= c.statut %></span>
             <% } %>
           </div>
         </div>

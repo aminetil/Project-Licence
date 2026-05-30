@@ -13,7 +13,6 @@ function getDb() {
 
 function initDatabase() {
   const db = getDb();
-
   
   db.exec(`
     CREATE TABLE IF NOT EXISTS utilisateurs (
@@ -28,7 +27,7 @@ function initDatabase() {
     )
   `);
 
-  
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS plantes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,8 +41,6 @@ function initDatabase() {
       image TEXT,
       growth_status TEXT DEFAULT 'seedling',
       seasonality TEXT DEFAULT 'all_year',
-      watering TEXT DEFAULT 'moderate',
-      light_needs TEXT DEFAULT 'full_sun',
       fertilization TEXT DEFAULT 'monthly',
       pruning TEXT DEFAULT 'annual',
       location TEXT DEFAULT 'greenhouse',
@@ -126,28 +123,25 @@ function seedDatabase() {
 
   // ── Seed plants ──
   const insertPlante = db.prepare(`
-    INSERT INTO plantes (nom, species, categorie, cout, prix, quantite, description, image, growth_status, seasonality, watering, light_needs, location)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO plantes (nom, species, categorie, cout, prix, quantite, description, image, growth_status, seasonality, location)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  // [name, species, category, cost, price, qty, description, image, growth_status, seasonality, watering, light_needs, location]
+  // [name, species, category, cost, price, qty, description, image, growth_status, seasonality, location]
   const plantsData = [
-    ['Red Rose',         'Rose',                   'flower',         100.0,350.0,53, null,                                      '/uploads/plant-1779317086067.jpg',  'ready_to_sell', 'spring',   'moderate', 'full_sun',      'greenhouse'],
-    ['Jasmine',          'Jasminum',               'tree',           500.0,1200.0,35,'White climbing flower with fragrance.',  '/uploads/plant-1779317496613.webp', 'growing',       'spring',   'moderate', 'full_sun',      'plot_A'],
-    ['Olive Tree',       'olive',                  'tree',           650.0,1500.0,20,null,                                      '/uploads/plant-1779317599613.jpg',  'ready_to_sell', 'all_year', 'low',      'full_sun',      'plot_B'],
-    ['Lemon Tree',       'Citrus',                 'tree',           230.0,1250.0,15,'Fruit tree producing fresh lemons.',     '/uploads/plant-1779317685887.webp', 'growing',       'all_year', 'moderate', 'full_sun',      'plot_B'],
-    ['Bougainvillea',    'Bougainvillea spectabilis','shrub',         8.0,  18.0, 40, 'Colorful climbing shrub.',               null, 'ready_to_sell', 'summer',   'low',      'full_sun',      'outdoor'],
-    ['Spider Plant',     'Chlorophytum comosum',   'indoor_plant',   200.0,600.0,28,'Large popular indoor plant.',             '/uploads/plant-1779318061471.jpg',  'ready_to_sell', 'all_year', 'moderate', 'partial_shade', 'plot_B'],
-    ['Ficus',            'Ficus benjamina',        'indoor_plant',   10.0, 25.0, 28, 'Large popular indoor plant.',            null, 'ready_to_sell', 'all_year', 'moderate', 'partial_shade', 'greenhouse'],
-    ['Monstera',         'Monstera deliciosa',     'indoor_plant',   12.0, 30.0, 18, 'Trendy tropical indoor plant.',          null, 'growing',       'all_year', 'moderate', 'partial_shade', 'greenhouse'],
-    ['Aloe Vera',        'Aloe vera',              'cactus',         3.0,  10.0, 60, 'Succulent plant with healing properties.',null,'ready_to_sell', 'all_year', 'low',      'full_sun',      'greenhouse'],
-    ['Lavender',         'Lavandula angustifolia', 'aromatic_herb',  4.0,  9.0,  45, 'Fragrant purple flowering herb.',        null, 'ready_to_sell', 'summer',   'low',      'full_sun',      'plot_A'],
-    ['Chamomile',        'Matricaria chamomilla',  'medicinal_plant',3.0,  8.0,  30, 'Medicinal herb with calming properties.',null,'growing',       'spring',   'moderate', 'full_sun',      'zone_1'],
-    ['Peppermint',       'Mentha piperita',        'medicinal_plant',2.5,  7.0,  50, 'Aromatic medicinal mint plant.',         null, 'ready_to_sell', 'all_year', 'high',     'partial_shade', 'zone_1'],
-    ['Ginger Plant',     'Zingiber officinale',    'medicinal_plant',600.0,1300.0,32,null,                                     '/uploads/plant-1779318389676.jpg',  'seedling',      'spring',   'moderate', 'full_sun',      'greenhouse'],
-    ['Sunflower',        'Helianthus annuus',      'flower',         150.0,550.0,43, null,                                      '/uploads/plant-1779318726321.jpeg', 'ready_to_sell', 'summer',   'moderate', 'full_sun',      'zone_2'],
-    ['Weeping Willow',   'Salix babylonica',       'tree',           25.0, 55.0, 8,  'Majestic ornamental weeping tree.',      null, 'seedling',      'all_year', 'high',     'full_sun',      'zone_2'],
-    ['Rosemary',         'Salvia rosmarinus',      'aromatic_herb',  3.5,  8.5,  40, 'Culinary and aromatic herb.',            null, 'ready_to_sell', 'all_year', 'low',      'full_sun',      'plot_B'],
+    ['Red Rose',         'Rose',                   'flower',         100.0,350.0,53, 'A classic symbol of beauty and passion. Thrives in full sun with moderate watering — water 2–3 times a week and avoid waterlogging.',                                                        '/uploads/plant-1779317086067.jpg',  'ready_to_sell', 'spring',   'greenhouse'],
+    ['Jasmine',          'Jasminum',               'tree',           500.0,1200.0,35,'White climbing flower with an enchanting fragrance. Prefers full sun and moderate watering — keep the soil slightly moist but well-drained.',                                              '/uploads/plant-1779317496613.webp', 'growing',       'spring',   'plot_A'],
+    ['Olive Tree',       'olive',                  'tree',           650.0,1500.0,20,'A majestic Mediterranean tree known for its longevity. Extremely drought-tolerant — water sparingly once established. Thrives in full sun and well-drained soil.',                        '/uploads/plant-1779317599613.jpg',  'ready_to_sell', 'all_year', 'plot_B'],
+    ['Lemon Tree',       'Citrus',                 'tree',           230.0,1250.0,15,'Fruit tree producing fresh, aromatic lemons year-round. Requires full sun and moderate watering — water every 5–7 days, more often in summer heat.',                                      '/uploads/plant-1779317685887.webp', 'growing',       'all_year', 'plot_B'],
+    ['Bougainvillea',    'Bougainvillea spectabilis','flower',        8.0,  18.0, 40, 'Vibrant climbing shrub with brilliant coloured bracts. Loves full sun and tolerates drought — water sparingly once established for best flowering.',                                         null, 'ready_to_sell', 'summer',   'outdoor'],
+    ['Spider Plant',     'Chlorophytum comosum',   'indoor_plant',   200.0,600.0,28,'One of the most popular and easy-care indoor plants. Does best in bright indirect light (partial shade) and appreciates moderate watering — let the soil dry slightly between waterings.', '/uploads/plant-1779318061471.jpg',  'ready_to_sell', 'all_year', 'plot_B'],
+    ['Ficus',            'Ficus benjamina',        'indoor_plant',   10.0, 25.0, 28, 'Classic indoor tree loved for its elegant, glossy foliage. Place in bright indirect light and water moderately — allow the top centimetre of soil to dry between waterings.',               null, 'ready_to_sell', 'all_year', 'greenhouse'],
+    ['Monstera',         'Monstera deliciosa',     'indoor_plant',   12.0, 30.0, 18, 'Iconic tropical houseplant with striking split leaves. Thrives in bright indirect light and needs moderate watering — water once a week and ensure good drainage.',                          null, 'growing',       'all_year', 'greenhouse'],
+    ['Lavender',         'Lavandula angustifolia', 'aromatic_herb',  4.0,  9.0,  45, 'Beloved fragrant herb with beautiful purple flower spikes. Thrives in full sun and dry conditions — water sparingly and only when the soil is completely dry.',                              null, 'ready_to_sell', 'summer',   'plot_A'],
+    ['Chamomile',        'Matricaria chamomilla',  'medicinal_plant',3.0,  8.0,  30, 'Gentle medicinal herb known for its calming properties and daisy-like flowers. Prefers full sun and moderate watering — keep the soil evenly moist during the growing season.',             null, 'growing',       'spring',   'zone_1'],
+    ['Ginger Plant',     'Zingiber officinale',    'medicinal_plant',600.0,1300.0,32,'Tropical spice plant cultivated for its aromatic and medicinal rhizomes. Prefers warm, filtered sunlight (full sun) and moderate watering — water regularly but ensure the soil drains well.','/uploads/plant-1779318389676.jpg',  'seedling',      'spring',   'greenhouse'],
+    ['Sunflower',        'Helianthus annuus',      'flower',         150.0,550.0,43, 'Cheerful annual celebrated for its bold yellow blooms and edible seeds. Demands full sun (6–8 hours daily) and moderate watering — water deeply 2–3 times a week at the base.',           '/uploads/plant-1779318726321.jpeg', 'ready_to_sell', 'summer',   'zone_2'],
+    ['Rosemary',         'Salvia rosmarinus',      'aromatic_herb',  3.5,  8.5,  40, 'Iconic culinary and aromatic Mediterranean herb with needle-like leaves. Loves full sun and low watering — water only when the soil is fully dry; it thrives on neglect.',                  null, 'ready_to_sell', 'all_year', 'plot_B'],
   ];
 
   for (const p of plantsData) {
@@ -185,7 +179,6 @@ function seedDatabase() {
 
   let v4 = insertVente.run('2026-04-20', client1, vendeurId, 19.0, 'pending');
   insertDetail.run(v4.lastInsertRowid, getPlantId.get('Lavender').id, 2, 9.0, 4.0);
-  insertDetail.run(v4.lastInsertRowid, getPlantId.get('Peppermint').id, 1, 7.0, 2.5);
 
   db.close();
   console.log(' Test data inserted (Admin, Clients, Plants, and Sales).');

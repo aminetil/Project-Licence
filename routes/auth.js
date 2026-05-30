@@ -49,8 +49,28 @@ router.get('/register', (req, res) => {
 router.post('/register', (req, res) => {
   const { nom, email, password, confirm_password, telephone, adresse } = req.body;
 
+  // Validation Email
+  const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    req.flash('error', 'Format d\'email invalide.');
+    return res.redirect('/register');
+  }
+
+  // Validation Mot de Passe (Majuscule, Minuscule, Chiffre, 6 chars min)
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+  if (!passwordRegex.test(password)) {
+    req.flash('error', 'Le mot de passe doit contenir au moins 6 caractères, une majuscule, une minuscule et un chiffre.');
+    return res.redirect('/register');
+  }
+
   if (password !== confirm_password) {
     req.flash('error', 'Passwords do not match.');
+    return res.redirect('/register');
+  }
+
+  // Validation Téléphone (10 chiffres)
+  if (telephone && !/^\d{10}$/.test(telephone)) {
+    req.flash('error', 'Le numéro de téléphone doit contenir exactement 10 chiffres.');
     return res.redirect('/register');
   }
 

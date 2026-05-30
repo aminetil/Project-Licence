@@ -26,8 +26,6 @@
                 <i class="bi bi-flower1"></i>
               <% } else if (c.categorie === 'tree') { %>
                 <i class="bi bi-tree"></i>
-              <% } else if (c.categorie === 'shrub') { %>
-                <i class="bi bi-flower3"></i>
               <% } else if (c.categorie === 'indoor_plant') { %>
                 <i class="bi bi-house-heart"></i>
               <% } else if (c.categorie === 'cactus') { %>
@@ -69,9 +67,6 @@
                 <div class="plant-name"><%= p.nom %></div>
                 <span class="badge badge-categorie mb-2"><%= p.categorie.replace('_', ' ') %></span>
                 <div class="plant-price"><%= Number(p.prix).toFixed(2) %> DA</div>
-                <% if (p.quantite < 5 && p.quantite > 0) { %>
-                  <small class="text-danger"><i class="bi bi-exclamation-circle"></i> Only <%= p.quantite %> left in stock</small>
-                <% } %>
               </div>
             </div>
           </a>

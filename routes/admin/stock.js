@@ -4,7 +4,7 @@ const { getDb } = require('../../database/init');
 
 const LOCATIONS = ['greenhouse', 'plot_A', 'plot_B', 'zone_1', 'zone_2', 'outdoor'];
 
-// GET /admin/stock — Stock overview
+
 router.get('/', (req, res) => {
   const db = getDb();
   const plantes = db.prepare('SELECT * FROM plantes ORDER BY quantite ASC').all();
@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
   });
 });
 
-// POST /admin/stock/mouvement — Add stock movement
+
 router.post('/mouvement', (req, res) => {
   const { id_plante, type, quantite, note, location } = req.body;
   const qty = parseInt(quantite);
@@ -39,11 +39,11 @@ router.post('/mouvement', (req, res) => {
     return res.redirect('/admin/stock');
   }
 
-  // Record movement
+
   db.prepare('INSERT INTO stock_mouvements (id_plante, type, quantite, note, location) VALUES (?, ?, ?, ?, ?)')
     .run(id_plante, type, qty, note || null, location || 'greenhouse');
 
-  // Update plant quantity and location
+
   if (type === 'entry') {
     db.prepare('UPDATE plantes SET quantite = quantite + ?, location = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?')
       .run(qty, location || plante.location, id_plante);

@@ -40,11 +40,11 @@
           </div>
           <div class="col-12">
             <label for="email" class="form-label fw-bold">Email</label>
-            <input type="email" class="form-control py-2" id="email" name="email" required>
+            <input type="email" class="form-control py-2" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" title="Veuillez entrer une adresse email valide (ex: nom@domaine.com)" required>
           </div>
           <div class="col-md-6">
             <label for="password" class="form-label fw-bold">Password</label>
-            <input type="password" class="form-control py-2" id="password" name="password" minlength="6" required>
+            <input type="password" class="form-control py-2" id="password" name="password" minlength="6" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Le mot de passe doit contenir au moins 6 caractères, dont une majuscule, une minuscule et un chiffre." required>
           </div>
           <div class="col-md-6">
             <label for="confirm_password" class="form-label fw-bold">Confirm Password</label>
@@ -52,7 +52,7 @@
           </div>
           <div class="col-12">
             <label for="telephone" class="form-label fw-bold">Phone Number</label>
-            <input type="text" class="form-control py-2" id="telephone" name="telephone">
+            <input type="text" class="form-control py-2" id="telephone" name="telephone" pattern="\d{10}" maxlength="10" title="Veuillez entrer exactement 10 chiffres (ex: 0555123456).">
           </div>
           <div class="col-12">
             <label for="adresse" class="form-label fw-bold">Address</label>

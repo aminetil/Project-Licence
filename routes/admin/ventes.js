@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDb } = require('../../database/init');
 
-// GET /admin/ventes — List all sales
+
 router.get('/', (req, res) => {
   const db = getDb();
   const ventes = db.prepare(`
@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
     ORDER BY v.date_vente DESC
   `).all();
 
-  // Get details for each sale
+
   const ventesAvecDetails = ventes.map(v => {
     const details = db.prepare(`
       SELECT dv.*, p.nom as plante_nom
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
   res.render('admin/ventes', { title: 'Sales Management', ventes: ventesAvecDetails });
 });
 
-// PUT /admin/ventes/:id/statut — Update sale status
+
 router.put('/:id/statut', (req, res) => {
   const { statut } = req.body;
   const db = getDb();
