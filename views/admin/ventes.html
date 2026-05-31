@@ -1,9 +1,10 @@
 <%- include('../partials/header.html') %>
-
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="mb-0"><i class="bi bi-cart-fill me-2"></i>Sales Management</h1>
+  <h1 class="mb-0">
+    <i class="bi bi-cart-fill me-2">
+    </i>Sales Management
+  </h1>
 </div>
-
 <div class="card">
   <div class="card-body p-0">
     <div class="table-responsive">
@@ -21,51 +22,62 @@
         </thead>
         <tbody>
           <% if (ventes.length === 0) { %>
-            <tr><td colspan="7" class="text-center text-muted py-4">No sales recorded</td></tr>
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">No sales recorded</td>
+          </tr>
           <% } %>
           <% ventes.forEach(v => { %>
-            <tr>
-              <td class="fw-bold">#<%= v.id %></td>
-              <td><%= new Date(v.date_vente).toLocaleDateString('en-US') %></td>
-              <td><%= v.client_nom || 'Guest Customer' %></td>
-              <td>
-                <% v.details.forEach(d => { %>
-                  <div class="small"><%= d.plante_nom %> × <%= d.quantite %> — <%= Number(d.prix_unitaire).toFixed(2) %> DA</div>
-                <% }); %>
-              </td>
-              <td class="fw-bold" style="color: var(--green-600);"><%= Number(v.total).toFixed(2) %></td>
-              <td>
-                <% if (v.statut === 'delivered') { %>
-                  <span class="badge bg-success"> Delivered</span>
-                <% } else if (v.statut === 'pending') { %>
-                  <span class="badge bg-warning text-dark"> Pending</span>
-                <% } else if (v.statut === 'confirmed') { %>
-                  <span class="badge bg-info text-dark"> Confirmed</span>
-                <% } else if (v.statut === 'in delivery') { %>
-                  <span class="badge bg-primary"> In delivery</span>
-                <% } else if (v.statut === 'cancelled') { %>
-                  <span class="badge bg-danger"> Cancelled</span>
-                <% } else { %>
-                  <span class="badge bg-secondary"><%= v.statut %></span>
-                <% } %>
-              </td>
-              <td>
-                <form method="POST" action="/admin/ventes/<%= v.id %>/statut?_method=PUT" style="display:inline;">
-                  <select name="statut" class="form-select form-select-sm d-inline-block" style="width:auto;" onchange="this.form.submit()">
-                    <option value="pending" <%= v.statut === 'pending' ? 'selected' : '' %>>Pending</option>
-                    <option value="confirmed" <%= v.statut === 'confirmed' ? 'selected' : '' %>>Confirmed</option>
-                    <option value="in delivery" <%= v.statut === 'in delivery' ? 'selected' : '' %>>In delivery</option>
-                    <option value="delivered" <%= v.statut === 'delivered' ? 'selected' : '' %>>Delivered</option>
-                    <option value="cancelled" <%= v.statut === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
-                  </select>
-                </form>
-              </td>
-            </tr>
+          <tr>
+            <td class="fw-bold">#<%= v.id %>
+            </td>
+            <td>
+              <%= new Date(v.date_vente).toLocaleDateString('en-US') %>
+            </td>
+            <td>
+              <%= v.client_nom || 'Guest Customer' %>
+            </td>
+            <td>
+              <% v.details.forEach(d => { %>
+              <div class="small">
+                <%= d.plante_nom %> × <%= d.quantite %> — <%= Number(d.prix_unitaire).toFixed(2) %> DA</div>
+              <% }); %>
+            </td>
+            <td class="fw-bold" style="color: var(--green-600);">
+              <%= Number(v.total).toFixed(2) %>
+            </td>
+            <td>
+              <% if (v.statut === 'delivered') { %>
+              <span class="badge bg-success"> Delivered</span>
+              <% } else if (v.statut === 'pending') { %>
+              <span class="badge bg-warning text-dark"> Pending</span>
+              <% } else if (v.statut === 'confirmed') { %>
+              <span class="badge bg-info text-dark"> Confirmed</span>
+              <% } else if (v.statut === 'in delivery') { %>
+              <span class="badge bg-primary"> In delivery</span>
+              <% } else if (v.statut === 'cancelled') { %>
+              <span class="badge bg-danger"> Cancelled</span>
+              <% } else { %>
+              <span class="badge bg-secondary">
+                <%= v.statut %>
+              </span>
+              <% } %>
+            </td>
+            <td>
+              <form method="POST" action="/admin/ventes/<%= v.id %>/statut?_method=PUT" style="display:inline;">
+                <select name="statut" class="form-select form-select-sm d-inline-block" style="width:auto;" onchange="this.form.submit()">
+                  <option value="pending" <%= v.statut === 'pending' ? 'selected' : '' %>>Pending</option>
+                  <option value="confirmed" <%= v.statut === 'confirmed' ? 'selected' : '' %>>Confirmed</option>
+                  <option value="in delivery" <%= v.statut === 'in delivery' ? 'selected' : '' %>>In delivery</option>
+                  <option value="delivered" <%= v.statut === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                  <option value="cancelled" <%= v.statut === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                </select>
+              </form>
+            </td>
+          </tr>
           <% }); %>
         </tbody>
       </table>
     </div>
   </div>
 </div>
-
 <%- include('../partials/footer.html') %>

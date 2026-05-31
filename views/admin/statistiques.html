@@ -1,24 +1,30 @@
 <%- include('../partials/header.html') %>
-
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <h1 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>Statistics</h1>
+  <h1 class="mb-0">
+    <i class="bi bi-bar-chart-line me-2">
+    </i>Statistics
+  </h1>
 </div>
-
-<!-- Filter Form -->
 <div class="card mb-4">
   <div class="card-body">
     <form method="GET" action="/admin/statistiques" class="row g-3 align-items-end">
       <div class="col-md-3">
-        <label class="form-label fw-bold"><i class="bi bi-calendar me-2"></i>Year</label>
+        <label class="form-label fw-bold">
+          <i class="bi bi-calendar me-2">
+          </i>Year</label>
         <select name="year" class="form-select">
           <option value="">All Years</option>
           <% availableYears.forEach(y => { %>
-            <option value="<%= y %>" <%= query.year === y ? 'selected' : '' %>><%= y %></option>
+          <option value="<%= y %>" <%= query.year === y ? 'selected' : '' %>>
+            <%= y %>
+          </option>
           <% }); %>
         </select>
       </div>
       <div class="col-md-3">
-        <label class="form-label fw-bold"><i class="bi bi-calendar-month me-2"></i>Month</label>
+        <label class="form-label fw-bold">
+          <i class="bi bi-calendar-month me-2">
+          </i>Month</label>
         <select name="month" class="form-select">
           <option value="">All Months</option>
           <option value="01" <%= query.month === '01' ? 'selected' : '' %>>January</option>
@@ -36,58 +42,73 @@
         </select>
       </div>
       <div class="col-md-3">
-        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-funnel me-2"></i>Apply Filter</button>
+        <button type="submit" class="btn btn-primary w-100">
+          <i class="bi bi-funnel me-2">
+          </i>Apply Filter</button>
       </div>
       <div class="col-md-3">
-        <a href="/admin/statistiques" class="btn btn-outline-secondary w-100"><i class="bi bi-arrow-counterclockwise me-2"></i>Reset</a>
+        <a href="/admin/statistiques" class="btn btn-outline-secondary w-100">
+          <i class="bi bi-arrow-counterclockwise me-2">
+          </i>Reset</a>
       </div>
     </form>
   </div>
 </div>
-
-<!-- Summary Cards -->
 <div class="row g-4 mb-4">
   <div class="col-md-3">
     <div class="stat-card">
       <div class="stat-icon" style="background: var(--green-50); color: var(--green-600);">
-        <i class="bi bi-flower1"></i>
+        <i class="bi bi-flower1">
+        </i>
       </div>
-      <div class="stat-value"><%= total_stock %></div>
+      <div class="stat-value">
+        <%= total_stock %>
+      </div>
       <div class="stat-label">Total plants in stock</div>
     </div>
   </div>
   <div class="col-md-3">
     <div class="stat-card">
       <div class="stat-icon" style="background: #e8f5e9; color: #2e7d32;">
-        <i class="bi bi-cash-coin"></i>
+        <i class="bi bi-cash-coin">
+        </i>
       </div>
-      <div class="stat-value"><%= Number(totals.ca_total).toFixed(2) %></div>
+      <div class="stat-value">
+        <%= Number(totals.ca_total).toFixed(2) %>
+      </div>
       <div class="stat-label">Total Turnover (DA)</div>
     </div>
   </div>
   <div class="col-md-3">
     <div class="stat-card">
       <div class="stat-icon" style="background: #fff8e1; color: #f9a825;">
-        <i class="bi bi-graph-up-arrow"></i>
+        <i class="bi bi-graph-up-arrow">
+        </i>
       </div>
-      <div class="stat-value"><%= Number(totals.benefice_total).toFixed(2) %></div>
+      <div class="stat-value">
+        <%= Number(totals.benefice_total).toFixed(2) %>
+      </div>
       <div class="stat-label">Total Profit (DA)</div>
     </div>
   </div>
   <div class="col-md-3">
     <div class="stat-card">
       <div class="stat-icon" style="background: #fce4ec; color: #c62828;">
-        <i class="bi bi-receipt"></i>
+        <i class="bi bi-receipt">
+        </i>
       </div>
-      <div class="stat-value"><%= totals.nb_ventes %></div>
+      <div class="stat-value">
+        <%= totals.nb_ventes %>
+      </div>
       <div class="stat-label">Number of Sales</div>
     </div>
   </div>
 </div>
-
-<!-- Turnover & Profit by month -->
 <div class="card">
-  <div class="card-header"><i class="bi bi-calendar3 me-2"></i>Turnover & Profit by Month</div>
+  <div class="card-header">
+    <i class="bi bi-calendar3 me-2">
+    </i>Turnover & Profit by Month
+  </div>
   <div class="card-body p-0">
     <table class="table table-hover mb-0">
       <thead>
@@ -100,19 +121,28 @@
       </thead>
       <tbody>
         <% if (parMois.length === 0) { %>
-          <tr><td colspan="4" class="text-center text-muted py-4">No data available</td></tr>
+        <tr>
+          <td colspan="4" class="text-center text-muted py-4">No data available</td>
+        </tr>
         <% } %>
         <% parMois.forEach(m => { %>
-          <tr>
-            <td class="fw-bold"><%= m.mois %></td>
-            <td class="text-end"><%= m.nb_ventes %></td>
-            <td class="text-end"><%= Number(m.ca).toFixed(2) %></td>
-            <td class="text-end fw-bold" style="color: var(--green-600);"><%= Number(m.benefice).toFixed(2) %></td>
-          </tr>
+        <tr>
+          <td class="fw-bold">
+            <%= m.mois %>
+          </td>
+          <td class="text-end">
+            <%= m.nb_ventes %>
+          </td>
+          <td class="text-end">
+            <%= Number(m.ca).toFixed(2) %>
+          </td>
+          <td class="text-end fw-bold" style="color: var(--green-600);">
+            <%= Number(m.benefice).toFixed(2) %>
+          </td>
+        </tr>
         <% }); %>
       </tbody>
     </table>
   </div>
 </div>
-
 <%- include('../partials/footer.html') %>

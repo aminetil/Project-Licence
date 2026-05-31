@@ -1,140 +1,121 @@
-const express = require('express');
-const session = require('express-session');
-const flash = require('connect-flash');
-const methodOverride = require('method-override');
-const path = require('path');
-const { initDatabase, seedDatabase } = require('./database/init');
-
+const express = require("express");
+const session = require("express-session");
+const flash = require("connect-flash");
+const methodOverride = require("method-override");
+const path = require("path");
+const { initDatabase, seedDatabase } = require("./database/init");
 initDatabase();
 seedDatabase();
-
 const app = express();
-
-
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.set('views', path.join(__dirname, 'views'));
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.engine("html", require("ejs").renderFile);
+app.set("view engine", "html");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "public", "uploads")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.use(methodOverride('_method', { methods: ['POST', 'GET'] }));
-app.use(methodOverride((req) => {
-  if (req.query && req.query._method) return req.query._method;
-}));
-
+app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
+app.use(
+  methodOverride((req) => {
+    if (req.query && req.query._method) return req.query._method;
+  }),
+);
 app.use((req, res, next) => {
   if (req.body === undefined) req.body = {};
   next();
 });
-const SqliteStore = require('better-sqlite3-session-store')(session);
-const sessionDb = require('better-sqlite3')('./database/sessions.db');
-
-app.use(session({
-  store: new SqliteStore({ client: sessionDb }),
-  secret: 'pepiniere-smart-2026-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
-}));
+const SqliteStore = require("better-sqlite3-session-store")(session);
+const sessionDb = require("better-sqlite3")("./database/sessions.db");
+app.use(
+  session({
+    store: new SqliteStore({ client: sessionDb }),
+    secret: "pepiniere-smart-2026-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+  }),
+);
 app.use(flash());
-
-
 app.use((req, res, next) => {
   res.locals.currentUser = req.session.user || null;
   res.locals.panier = req.session.panier || [];
-  res.locals.success = req.flash('success');
-  res.locals.error = req.flash('error');
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   res.locals.currentPath = req.path;
   next();
 });
-
-
 function requireAuth(req, res, next) {
   if (!req.session.user) {
-    req.flash('error', 'Please log in.');
-    return res.redirect('/login');
+    req.flash("error", "Please log in.");
+    return res.redirect("/login");
   }
   next();
 }
-
 function requireAdmin(req, res, next) {
   if (!req.session.user) {
-    req.flash('error', 'Please log in.');
-    return res.redirect('/login');
+    req.flash("error", "Please log in.");
+    return res.redirect("/login");
   }
-  if (req.session.user.role !== 'admin' && req.session.user.role !== 'vendeur') {
-    req.flash('error', 'Access denied. Reserved for administrators.');
-    return res.redirect('/client/home');
+  if (
+    req.session.user.role !== "admin" &&
+    req.session.user.role !== "vendeur"
+  ) {
+    req.flash("error", "Access denied. Reserved for administrators.");
+    return res.redirect("/client/home");
   }
   next();
 }
-
 function requireClient(req, res, next) {
   if (!req.session.user) {
-    req.flash('error', 'Please log in to access your space.');
-    return res.redirect('/login');
+    req.flash("error", "Please log in to access your space.");
+    return res.redirect("/login");
   }
-  if (req.session.user.role !== 'client') {
-    return res.redirect('/admin/plantes'); 
+  if (req.session.user.role !== "client") {
+    return res.redirect("/admin/plantes");
   }
   next();
 }
-
-
-const authRoutes = require('./routes/auth');
-app.use('/', authRoutes);
-
-
-const adminPlantesRoutes = require('./routes/admin/plantes');
-const adminStockRoutes = require('./routes/admin/stock');
-const adminVentesRoutes = require('./routes/admin/ventes');
-const adminUsersRoutes = require('./routes/admin/utilisateurs');
-const adminStatsRoutes = require('./routes/admin/statistiques');
-
-
-app.get('/admin/dashboard', requireAdmin, (req, res) => res.redirect('/admin/plantes'));
-app.use('/admin/plantes', requireAdmin, adminPlantesRoutes);
-app.use('/admin/stock', requireAdmin, adminStockRoutes);
-app.use('/admin/ventes', requireAdmin, adminVentesRoutes);
-app.use('/admin/utilisateurs', requireAdmin, adminUsersRoutes);
-app.use('/admin/statistiques', requireAdmin, adminStatsRoutes);
-
-
-const clientHomeRoutes = require('./routes/client/home');
-const clientCatalogueRoutes = require('./routes/client/catalogue');
-const clientPanierRoutes = require('./routes/client/panier');
-const clientCommandesRoutes = require('./routes/client/commandes');
-const clientProfilRoutes = require('./routes/client/profil');
-
-
-app.use('/client/home', clientHomeRoutes);
-app.use('/client/catalogue', clientCatalogueRoutes);
-app.use('/client/panier', clientPanierRoutes); 
-app.use('/client/commandes', requireClient, clientCommandesRoutes);
-app.use('/client/profil', requireClient, clientProfilRoutes);
-
-
-app.get('/', (req, res) => {
+const authRoutes = require("./routes/auth");
+app.use("/", authRoutes);
+const adminPlantesRoutes = require("./routes/admin/plantes");
+const adminStockRoutes = require("./routes/admin/stock");
+const adminVentesRoutes = require("./routes/admin/ventes");
+const adminUsersRoutes = require("./routes/admin/utilisateurs");
+const adminStatsRoutes = require("./routes/admin/statistiques");
+app.get("/admin/dashboard", requireAdmin, (req, res) =>
+  res.redirect("/admin/plantes"),
+);
+app.use("/admin/plantes", requireAdmin, adminPlantesRoutes);
+app.use("/admin/stock", requireAdmin, adminStockRoutes);
+app.use("/admin/ventes", requireAdmin, adminVentesRoutes);
+app.use("/admin/utilisateurs", requireAdmin, adminUsersRoutes);
+app.use("/admin/statistiques", requireAdmin, adminStatsRoutes);
+const clientHomeRoutes = require("./routes/client/home");
+const clientCatalogueRoutes = require("./routes/client/catalogue");
+const clientPanierRoutes = require("./routes/client/panier");
+const clientCommandesRoutes = require("./routes/client/commandes");
+const clientProfilRoutes = require("./routes/client/profil");
+app.use("/client/home", clientHomeRoutes);
+app.use("/client/catalogue", clientCatalogueRoutes);
+app.use("/client/panier", clientPanierRoutes);
+app.use("/client/commandes", requireClient, clientCommandesRoutes);
+app.use("/client/profil", requireClient, clientProfilRoutes);
+app.get("/", (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/client/home'); 
+    return res.redirect("/client/home");
   }
-  if (req.session.user.role === 'admin' || req.session.user.role === 'vendeur') {
-    return res.redirect('/admin/plantes');
+  if (
+    req.session.user.role === "admin" ||
+    req.session.user.role === "vendeur"
+  ) {
+    return res.redirect("/admin/plantes");
   } else {
-    return res.redirect('/client/home');
+    return res.redirect("/client/home");
   }
 });
-
-
 app.use((req, res) => {
-  res.status(404).render('404', { title: 'Page Not Found' });
+  res.status(404).render("404", { title: "Page Not Found" });
 });
-
-
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`\n KHADRA E-Commerce & Management System`);

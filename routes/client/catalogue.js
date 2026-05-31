@@ -1,50 +1,47 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getDb } = require('../../database/init');
-
-
-router.get('/', (req, res) => {
+const { getDb } = require("../../database/init");
+router.get("/", (req, res) => {
   const db = getDb();
   const { q, categorie } = req.query;
-  
   let query = "SELECT * FROM plantes WHERE 1=1";
   const params = [];
-  
   if (q) {
-    query += ' AND (nom LIKE ? OR description LIKE ? OR species LIKE ?)';
+    query += " AND (nom LIKE ? OR description LIKE ? OR species LIKE ?)";
     params.push(`%${q}%`, `%${q}%`, `%${q}%`);
   }
   if (categorie) {
-    query += ' AND categorie = ?';
+    query += " AND categorie = ?";
     params.push(categorie);
   }
-  
-  query += ' ORDER BY nom';
+  query += " ORDER BY nom";
   const plantes = db.prepare(query).all(...params);
-  const categories = db.prepare("SELECT DISTINCT categorie FROM plantes ORDER BY categorie").all();
-  
+  const categories = db
+    .prepare("SELECT DISTINCT categorie FROM plantes ORDER BY categorie")
+    .all();
   db.close();
-  res.render('client/catalogue', { 
-    title: 'Catalogue', plantes, categories, 
-    search: q || '', selectedCategorie: categorie || '' 
+  res.render("client/catalogue", {
+    title: "Catalogue",
+    plantes,
+    categories,
+    search: q || "",
+    selectedCategorie: categorie || "",
   });
 });
-
-
-router.get('/:id', (req, res) => {
+router.get("/:id", (req, res) => {
   const db = getDb();
-  const plante = db.prepare('SELECT * FROM plantes WHERE id = ?').get(req.params.id);
-  
+  const plante = db
+    .prepare("SELECT * FROM plantes WHERE id = ?")
+    .get(req.params.id);
   if (!plante) {
     db.close();
-    req.flash('error', 'Plant not found.');
-    return res.redirect('/client/catalogue');
+    req.flash("error", "Plant not found.");
+    return res.redirect("/client/catalogue");
   }
-
-  const related = db.prepare("SELECT * FROM plantes WHERE categorie = ? AND id != ? LIMIT 4").all(plante.categorie, plante.id);
-  
+  const related = db
+    .prepare("SELECT * FROM plantes WHERE categorie = ? AND id != ? LIMIT 4")
+    .all(plante.categorie, plante.id);
   db.close();
-  res.render('client/plante_detail', { title: plante.nom, plante, related });
+  res.render("client/plante_detail", { title: plante.nom, plante, related });
 });
-
 module.exports = router;

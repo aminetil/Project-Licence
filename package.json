@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "node --watch --watch-path=./routes --watch-path=./views --watch-path=./public/css --watch-path=./app.js app.js"
+    "dev": "node --watch --watch-path=./routes --watch-path=./views --watch-path=./public/css --watch-path=./app.js app.js",
+    "format": "prettier --write . && js-beautify --replace \"views/**/*.html\" --indent-size 2 --wrap-line-length 0"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +23,9 @@
     "method-override": "^3.0.0",
     "multer": "^2.1.1",
     "pdfkit": "^0.17.2"
+  },
+  "devDependencies": {
+    "js-beautify": "^1.15.4",
+    "prettier": "^3.8.3"
   }
 }
